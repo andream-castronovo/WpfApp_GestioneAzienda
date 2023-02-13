@@ -23,6 +23,8 @@ namespace WpfApp_GestioneAzienda
         public MainWindow()
         {
             InitializeComponent();
+
+
         }
     }
 }

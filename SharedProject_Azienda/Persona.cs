@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SharedProject_Azienda
@@ -8,8 +9,14 @@ namespace SharedProject_Azienda
     {
         string _nome;
         string _cognome;
+        Guid _id;
 
-        public Guid ID { get; set; }
+        static List<Guid> _allIds = new List<Guid>();
+
+        public Guid ID 
+        {
+            get => _id;
+        }
         
         public string Nome
         {
@@ -31,10 +38,29 @@ namespace SharedProject_Azienda
             }
         }
 
-        public Persona()
+        public Persona() : this ("<no_name>","<no_surname>")
+        { }
+        public Persona(string nome, string cognome)
         {
-            _nome = "<no_name>"
-            _cognome = "<no_surname>"
+            Guid id = GeneraGUID();
+
+            _nome = nome;
+            _cognome = cognome;
+
+            _id = id;
+            _allIds.Add(id);
+        }
+
+        private Guid GeneraGUID()
+        {
+            Guid id = Guid.NewGuid();
+            bool valido = true;
+            do
+            {
+                if (_allIds.Contains(id))
+                    valido = false;
+            } while (!valido);
+            return id;
         }
     }
 }
