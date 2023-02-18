@@ -19,7 +19,7 @@ namespace WpfApp_GestioneAzienda
         {
              _azienda = new Company<decimal>();
 
-
+            
         }
     }
 }
