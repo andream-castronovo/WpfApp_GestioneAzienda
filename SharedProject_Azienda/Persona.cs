@@ -2,17 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Controls;
 
 namespace SharedProject_Azienda
 {
-    abstract class Persona
+    abstract class Persona<T> where T : struct
     {
+        // Non tutto il contenuto è abstract in quanto nelle classi derivate servono,
+        // non mettendole abstract mi risparmio di riscrivere tutti i codici comuni.
+
+        #region CDC
         string _nome;
         string _cognome;
         Guid _id;
+        #endregion
 
-        static List<Guid> _allIds = new List<Guid>();
+        private static List<Guid> _allIds = new List<Guid>();
 
+        #region Proprietà
         public Guid ID 
         {
             get => _id;
@@ -37,7 +44,26 @@ namespace SharedProject_Azienda
                 _cognome = value;
             }
         }
+        #endregion
+        
+        private static Guid GeneraGUID()
+        {
+            Guid id = Guid.NewGuid();
+            
+            while (_allIds.Contains(id))
+                id = Guid.NewGuid();
+            
+            return id;
+        }
+        
+        public abstract T GetEconomicValue();
 
+        public override string ToString()
+        {
+            return $"$Nominativo: {_nome} {_cognome}";
+        }
+
+        #region Costruttori
         public Persona() : this ("<no_name>","<no_surname>")
         { }
         public Persona(string nome, string cognome)
@@ -50,17 +76,7 @@ namespace SharedProject_Azienda
             _id = id;
             _allIds.Add(id);
         }
+        #endregion
 
-        private Guid GeneraGUID()
-        {
-            Guid id = Guid.NewGuid();
-            bool valido = true;
-            do
-            {
-                if (_allIds.Contains(id))
-                    valido = false;
-            } while (!valido);
-            return id;
-        }
     }
 }
