@@ -55,7 +55,12 @@ namespace SharedProject_Azienda
             
             return id;
         }
-        
+
+        /// <summary>
+        /// https://www.investopedia.com/terms/e/economic-value.asp
+        /// Il beneficio che l'azienda trae da un bene
+        /// </summary>
+        /// <returns></returns>
         public abstract T GetEconomicValue();
 
         public override string ToString()

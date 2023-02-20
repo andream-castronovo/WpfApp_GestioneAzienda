@@ -14,6 +14,7 @@ namespace SharedProject_Azienda
         public Employee(string nome, string cognome, T stipendioAnnuo) : base(nome, cognome) 
         {
             StipendioAnnuo = stipendioAnnuo; // Uso la proprietà perché così quando implementerò controlli non sarà da cambiare.
+            
         }
 
         public T StipendioAnnuo

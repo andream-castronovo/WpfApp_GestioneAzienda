@@ -17,9 +17,16 @@ namespace WpfApp_GestioneAzienda
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-             _azienda = new Company<decimal>();
+            // Decimal è un tipo che gestisce numeri con la virgola in modo
+            // più preciso rispetto a double e float; utile per le valute.
+            // Per usarlo è necessario aggiungere "m" alla fine del numero in modo
+            // da differenziarlo dal double (usato di default per i numeri con la virgola in c#)
 
-            
+            _azienda = new Company<decimal>();
+
+            _azienda.ListaDipendenti.Add(
+                new Employee<decimal>("Giorgio", "Rossi", 1200.00m)
+                );
         }
     }
 }

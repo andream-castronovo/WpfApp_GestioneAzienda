@@ -46,13 +46,14 @@ namespace SharedProject_Azienda
         {
             get
             {
+                T spese = default;
                 // TODO: Da completare
                 foreach (Employee<T> d in _listaDipendenti)
                 {
-
+                    spese += (dynamic)d.StipendioAnnuo;
                 }
 
-                return default(T); // HACK: Cambiare il valore restituito
+                return spese; // HACK: Cambiare il valore restituito
             }
         }
 

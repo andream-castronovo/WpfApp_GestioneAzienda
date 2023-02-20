@@ -9,8 +9,54 @@
         Height="450" 
         Width="800"
         Loaded="Window_Loaded">
-    
+
     <Grid>
         
+        <Grid Width="400" Height="200">
+            <!--Griglia dati-->
+            <Grid.RowDefinitions>
+                <RowDefinition Height=".2*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+                <RadioButton Name="rdbCliente" Content="Cliente" IsChecked="True"/>
+                <RadioButton Name="rdbImpiegato" Content="Impiegato" Margin="10,0,0,0"/>
+            </StackPanel>
+
+            <!--Griglia nome e cognome-->
+            <Grid Grid.Row="1"  VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label  HorizontalContentAlignment="Right" Grid.Row="0" Grid.Column="0" Content="Nome " VerticalAlignment="Top" Padding="4"/>
+                <Label  HorizontalContentAlignment="Right" Grid.Row="0" Grid.Column="2" Content="Cognome " VerticalAlignment="Top" Padding="4"/>
+
+                <TextBox Grid.Row="0" Grid.Column="1" Name="txtName" VerticalAlignment="Top" Padding="4" />
+                <TextBox Grid.Row="0" Grid.Column="3" Name="txtSurname" VerticalAlignment="Top" Padding="4"/>
+            </Grid>
+
+            <!--Griglia impiegato-->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Content="Stipendio annuo" HorizontalContentAlignment="Left" VerticalAlignment="Top" Padding="4"/>
+                <TextBox Grid.Column="1" x:Name="txtStipendio" Padding="4" VerticalAlignment="Top"/>
+            </Grid>
+
+            
+            
+        </Grid>
     </Grid>
+        
 </Window>
