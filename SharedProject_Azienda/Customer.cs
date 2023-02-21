@@ -10,5 +10,15 @@ namespace SharedProject_Azienda
         {
             throw new NotImplementedException();
         }
+
+        List<Acquisto<T>> _listaAcquisti;
+
+        public Customer(string name, string surname) : this(name, surname, new List<Acquisto<T>>())
+        {}
+
+        public Customer(string name, string surname, List<Acquisto<T>> acquisti) : base(name, surname)
+        {
+            _listaAcquisti = acquisti;
+        }
     }
 }

@@ -9,6 +9,7 @@
     <Import_RootNamespace>SharedProject_Azienda</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Acquisto.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Company.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Customer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Employee.cs" />
