@@ -65,7 +65,7 @@ namespace SharedProject_Azienda
 
         public override string ToString()
         {
-            return $"$Nominativo: {_nome} {_cognome}";
+            return $"Nominativo:\n\t{_nome} {_cognome}";
         }
 
         #region Costruttori

@@ -1,5 +1,6 @@
 ﻿using SharedProject_Azienda;
 using System.Windows;
+using System.Collections.Generic;
 
 namespace WpfApp_GestioneAzienda
 {
@@ -27,6 +28,24 @@ namespace WpfApp_GestioneAzienda
             _azienda.ListaDipendenti.Add(
                 new Employee<decimal>("Giorgio", "Rossi", 1200.00m)
                 );
+            _azienda.ListaDipendenti.Add(
+                new Employee<decimal>("Annamaria", "Grondaia", 3000.90m)
+                );
+
+
+            _azienda.ListaClienti.Add(
+                new Customer<decimal>("Alberto", "Giacomini", new List<string>() { "Bugatti" })
+                );
+            _azienda.ListaClienti.Add(
+                new Customer<decimal>("Giovanni", "Giorgio", new List<string>() { "Ferrari" })
+                );
+
+
+        }
+
+        private void btnGenerateDipendenti_Click(object sender, RoutedEventArgs e)
+        {
+            lstDipendenti.ItemsSource = _azienda.ListaDipendenti;
         }
     }
 }
