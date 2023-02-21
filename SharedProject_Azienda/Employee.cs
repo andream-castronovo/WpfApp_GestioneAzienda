@@ -32,5 +32,10 @@ namespace SharedProject_Azienda
             // TODO
             throw new NotImplementedException();
         }
+
+        public override string ToString()
+        {
+            return base.ToString() + $"\nStipendio annuo:\n\t{_stipendioAnnuo}";
+        }
     }
 }

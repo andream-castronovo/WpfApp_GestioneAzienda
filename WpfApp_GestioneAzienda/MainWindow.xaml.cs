@@ -1,6 +1,7 @@
 ﻿using SharedProject_Azienda;
 using System.Collections.Generic;
 using System.Windows;
+using System.Collections.Generic;
 
 namespace WpfApp_GestioneAzienda
 {
@@ -33,48 +34,14 @@ namespace WpfApp_GestioneAzienda
             rdbCliente.IsChecked = true;
         }
 
-
-        void CheckGrid()
-        {
-            if (rdbCliente.IsChecked == true) 
-            { 
-                grdCliente.Visibility = Visibility.Visible;
-                grdImpiegato.Visibility = Visibility.Collapsed;
-            }
-            else if (rdbImpiegato.IsChecked == true)
-            {
-                grdCliente.Visibility = Visibility.Collapsed;
-                grdImpiegato.Visibility = Visibility.Visible;
-            }
-        }
-
-        private void rdb_Checked(object sender, RoutedEventArgs e)
-        {
-            CheckGrid();
-        }
-        private void btnAddPerson_Click(object sender, RoutedEventArgs e)
-        {
-            if (txtName.Text == "")
-                return;
-            if (txtSurname.Text == "")
-                return;
-
-            if (rdbCliente.IsEnabled == true)
-                _azienda.ListaClienti.Add(
-                    new Customer<decimal>(
-                        txtName.Text,
-                        txtSurname.Text,
-                        new List<Acquisto<decimal>>() { new Acquisto<decimal>("Bugatti", 3600.00m) }
-                    )
-                );
-
-
-        }
-
         private void btnAggiungiAcquisto_Click(object sender, RoutedEventArgs e)
         {
             
         }
 
+        private void btnGenerateDipendenti_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

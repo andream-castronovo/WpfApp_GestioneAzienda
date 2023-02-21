@@ -8,88 +8,106 @@
         Title="MainWindow" 
         Height="450" 
         Width="800"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded"
+        MinWidth="200"
+        MinHeight="100"
+        >
 
     <Grid>
-        
-        <Grid Width="400" Height="300" HorizontalAlignment="Left" Margin="5,0,0,0">
-            <!--Griglia dati-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2.1*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2.1*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height=".3*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height=".3*"/>
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
-                <RadioButton Name="rdbCliente" Content="Cliente" Checked="rdb_Checked"/>
-                <RadioButton Name="rdbImpiegato" Content="Impiegato" Margin="10,0,0,0" Checked="rdb_Checked"/>
-            </StackPanel>
+            <!--Scelta cliente o impiegato-->
+            <Viewbox MaxHeight="20" MinHeight="20" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0"> <!--Per modificare grandezza radio button-->
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton Name="rdbCliente" Content="Cliente" IsChecked="True"/>
+                    <RadioButton Name="rdbImpiegato" Content="Impiegato" Margin="10,0,0,0"/>
+                </StackPanel>
+            </Viewbox>
 
             <!--Griglia nome e cognome-->
-            <Grid Grid.Row="1"  VerticalAlignment="Center">
+            <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Label  HorizontalContentAlignment="Right" Grid.Row="0" Grid.Column="0" Content="Nome " VerticalAlignment="Top" Padding="4"/>
-                <Label  HorizontalContentAlignment="Right" Grid.Row="0" Grid.Column="2" Content="Cognome " VerticalAlignment="Top" Padding="4"/>
-
-                <TextBox Grid.Row="0" Grid.Column="1" Name="txtName" VerticalAlignment="Top" Padding="4" />
-                <TextBox Grid.Row="0" Grid.Column="3" Name="txtSurname" VerticalAlignment="Top" Padding="4"/>
-            </Grid>
-
-            <!--Griglia impiegato-->
-            <Grid x:Name="grdImpiegato" Grid.Row="2" Visibility="Collapsed">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <Label Grid.Column="0" Content="Stipendio annuo" HorizontalContentAlignment="Left" VerticalAlignment="Top" Padding="4"/>
-                <TextBox Grid.Column="1" x:Name="txtStipendio" Padding="4" VerticalAlignment="Top"/>
-            </Grid>
-            
-            <!--Griglia cliente-->
-            <Grid x:Name="grdCliente" Grid.Row="2" Visibility="Visible">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <StackPanel Grid.ColumnSpan="2">
-                    <Label Content="Acquisti effettuati" HorizontalContentAlignment="Left" VerticalAlignment="Top" Padding="4"/>
-                    <ListBox Name="lstAcquisti" Padding="4" MinHeight="20" MaxHeight="90" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="3,0,3,0"/>
-                </StackPanel>
-
-                <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                    <Button x:Name="btnAggiungiAcquisto" Content="_Aggiungi acquisto" Click="btnAggiungiAcquisto_Click"/>
-                    <Button x:Name="btnRimuoviAcquisto" Content="Rimuovi acquisto" Margin="0,5,0,0"/>
-                    <Button x:Name="btnModifcaAcquisto" Content="Modifica acquisto" Margin="0,5,0,0"/>
-                </StackPanel>
-
-                <Grid Grid.Column="3">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
+                <!--Nome-->
+                <Grid Margin="2"> 
                     <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition Height="22"/>
+                        <RowDefinition Height="20"/>
                     </Grid.RowDefinitions>
+
+                    <Label Grid.ColumnSpan="2" Grid.RowSpan="2" Content="Nome" HorizontalAlignment="Center"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" d:Text="Nome" MaxWidth="150" MinWidth="70"/>
+                </Grid>
+                
+                <!--Cognome-->
+                <Grid Margin="2" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="22"/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.ColumnSpan="2" Grid.RowSpan="2" Content="Cognome" HorizontalAlignment="Center"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" d:Text="Cognome" MaxWidth="150" MinWidth="70"/>
+                </Grid>
+
+                <!--<Label HorizontalContentAlignment="Right" Grid.Row="0" Grid.Column="0" Content="Nome " Padding="4"/>
+                <Label HorizontalContentAlignment="Right" Grid.Row="0" Grid.Column="2" Content="Cognome " Padding="4"/>
+
+                <TextBox Grid.Row="0" Grid.Column="1" Name="txtName" Padding="4" Width="100"/>
+                <TextBox Grid.Row="0" Grid.Column="3" Name="txtSurname" Padding="4" Width="100"/>-->
+            </Grid>
+
+
+        </Grid>
+        
+        <GroupBox Header="Impiegati" Grid.Row="1" Grid.Column="1">
+            <Grid>
+                <Grid Margin="2" Grid.Column="1"> <!--Stipendio annuo-->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="22"/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.ColumnSpan="2" Grid.RowSpan="2" Content="Stipendio annuo" HorizontalAlignment="Center"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" d:Text="Stipendio annuo" MaxWidth="150" MinWidth="70"/>
                 </Grid>
             </Grid>
+        </GroupBox>
 
-            <Button Grid.Row="3" Content="Aggiungi" Width="100" x:Name="btnAddPerson" Click="btnAddPerson_Click"/>
-        </Grid>
+        <GroupBox Visibility="Hidden" Header="Lista dipendenti" Grid.Row="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Button Content="Genera lista" x:Name="btnGenerateDipendenti" Click="btnGenerateDipendenti_Click"/>
+
+                <ListBox Grid.Row="1" x:Name="lstDipendenti" Margin="2" d:ItemsSource="{d:SampleData}"/>
+                
+            </Grid>
+        </GroupBox>
+
+        
+        
     </Grid>
         
 </Window>
