@@ -92,7 +92,7 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Visibility="Hidden" Header="Lista dipendenti" Grid.Row="1">
+        <GroupBox Visibility="Hidden" d:Visibility="Visible" Header="Lista dipendenti" Grid.Row="1">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
