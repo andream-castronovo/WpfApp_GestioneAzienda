@@ -1,6 +1,7 @@
 ﻿using SharedProject_Azienda;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace WpfApp_GestioneAzienda
 {
@@ -23,6 +24,9 @@ namespace WpfApp_GestioneAzienda
             // Per usarlo è necessario aggiungere "m" alla fine del numero in modo
             // da differenziarlo dal double (usato di default per i numeri con la virgola in c#)
 
+            rdbCliente.IsChecked = true;
+
+
             _azienda = new Company<decimal>();
 
             _azienda.ListaDipendenti.Add(
@@ -34,18 +38,34 @@ namespace WpfApp_GestioneAzienda
             
 
             _azienda.ListaClienti.Add(
-                new Customer<decimal>("Alberto", "Giacomini", new List<Acquisto<decimal>>() { new Acquisto<decimal>("Bugatti",3200m) })
+                new Customer<decimal>("Alberto", "Giacomini", new List<Acquisto<decimal>>() { new Acquisto<decimal>(Prodotti.Resistore,3200m) })
                 );
             _azienda.ListaClienti.Add(
-                new Customer<decimal>("Giovanni", "Giorgio", new List<Acquisto<decimal>>() { new Acquisto<decimal>("Ferrari", 2400m) })
+                new Customer<decimal>("Giovanni", "Giorgio", new List<Acquisto<decimal>>() { new Acquisto<decimal>(Prodotti.Condensatore, 2400m) })
                 );
-
-
         }
 
         private void btnGenerateDipendenti_Click(object sender, RoutedEventArgs e)
         {
             lstDipendenti.ItemsSource = _azienda.ListaDipendenti;
+        }
+
+        private void Check_Changed(object sender, RoutedEventArgs e)
+        {
+            RadioButton rdb = (RadioButton)sender;
+
+            switch (rdb.Tag)
+            {
+                case "cliente":
+                    grpImpiegati.Visibility = Visibility.Collapsed;
+                    grpClienti.Visibility = Visibility.Visible;
+                    break;
+                case "dipendente":
+                    grpImpiegati.Visibility = Visibility.Visible;
+                    grpClienti.Visibility = Visibility.Collapsed;
+                    lstAcquisti.SelectedIndex = -1;
+                    break;
+            }
         }
     }
 }

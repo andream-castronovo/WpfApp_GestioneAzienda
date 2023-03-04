@@ -1,16 +1,19 @@
 using System;
+using System.Windows.Controls;
 
 namespace SharedProject_Azienda
 {
     class Acquisto<T> where T : struct
     {
-        string _name;
+        Prodotti _tipo;
+        int quantita;
         T _costo;
-
-        public Acquisto(string name, T costo)
+        string _note;
+        public Acquisto(Prodotti tipo, T costo, string note = null)
         {
-            _name = name;
+            _tipo = tipo;
             _costo = costo;
+            _note = note;
         }
 
         public T Price
@@ -18,9 +21,17 @@ namespace SharedProject_Azienda
             get => _costo;
         }
 
-        public string Name
+        public Prodotti Tipo
         {
-            get => _name;
+            get => _tipo;
+        }
+
+        /// <summary>
+        /// Può essere null.
+        /// </summary>
+        public string Note
+        {
+            get => _note;
         }
         
     }
