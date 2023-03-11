@@ -59,7 +59,7 @@
                         </Grid.RowDefinitions>
 
                         <Label Grid.ColumnSpan="2" Grid.RowSpan="2" Content="Nome" HorizontalAlignment="Center"/>
-                        <TextBox Grid.Row="1" Grid.Column="1" d:Text="Nome" MaxWidth="150" MinWidth="70"/>
+                        <TextBox x:Name="txtNome" Grid.Row="1" Grid.Column="1" d:Text="Nome" MaxWidth="150" MinWidth="70"/>
                     </Grid>
                 
                     <!--Cognome-->
@@ -70,7 +70,7 @@
                         </Grid.RowDefinitions>
 
                         <Label Grid.ColumnSpan="2" Grid.RowSpan="2" Content="Cognome" HorizontalAlignment="Center"/>
-                        <TextBox Grid.Row="1" Grid.Column="1" d:Text="Cognome" MaxWidth="150" MinWidth="70"/>
+                        <TextBox x:Name="txtCognome" Grid.Row="1" Grid.Column="1" d:Text="Cognome" MaxWidth="150" MinWidth="70"/>
                     </Grid>
 
                     <!--<Label HorizontalContentAlignment="Right" Grid.Row="0" Grid.Column="0" Content="Nome " Padding="4"/>
@@ -93,7 +93,7 @@
                     </Grid.RowDefinitions>
 
                     <Label Grid.ColumnSpan="2" Grid.RowSpan="2" Content="Stipendio annuo" HorizontalAlignment="Center"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" d:Text="Stipendio annuo" MaxWidth="150" MinWidth="70"/>
+                    <TextBox x:Name="txtStipendio" Grid.Row="1" Grid.Column="1" d:Text="Stipendio annuo" MaxWidth="150" MinWidth="70"/>
                 </Grid>
             </GroupBox>
 
@@ -113,15 +113,23 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                     
-                        <Grid Width="150" Height="50">
-                            
+                        <!--Selezione acquisto-->
+                        <Grid Width="150" Height="66">
+
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="22"/>
                                 <RowDefinition Height="22"/>
+                                <RowDefinition Height="22"/>
                             </Grid.RowDefinitions>
-                      
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
                             <Label Grid.ColumnSpan="2" Grid.RowSpan="2" Content="Acquisto" HorizontalAlignment="Center"/>
                             <ComboBox Grid.Row="1" Name="cmbListaAcquisti" d:ItemsSource="{d:SampleData}" SelectedIndex="0"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtPrezzoAcquisto" TextChanged="txtPrezzoAcquisto_TextChanged"/>
+                            <Button  Grid.ColumnSpan="2" Grid.Row="2" x:Name="btnAggiungiAcquisto" Content="Aggiungi acquisto" Click="btnAggiungiAcquisto_Click"/>
                         </Grid>
                     </Grid>
                     
@@ -135,6 +143,8 @@
                 
             </GroupBox>
 
+
+            <Button x:Name="btnAggiungiAllaAzienda" Content="Aggiungi Cliente" Grid.Row="2" Width="100" MinWidth="95" Height="50" MinHeight="20" Click="btnAggiungiAllaAzienda_Click"/>
         </Grid>
         
         
