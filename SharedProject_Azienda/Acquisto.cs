@@ -33,6 +33,10 @@ namespace SharedProject_Azienda
         {
             get => _note;
         }
-        
+
+        public override string ToString()
+        {
+            return _tipo.ToString() + $" {_costo:f2}";
+        }
     }
 }
