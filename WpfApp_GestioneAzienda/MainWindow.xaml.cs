@@ -28,9 +28,10 @@ namespace WpfApp_GestioneAzienda
 
         Company<decimal> _azienda;
         Persona<decimal> _personaCorrente;
-        bool _caricato;
-
+        bool _toSave;
         #region Eventi
+
+        #region Window
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -58,18 +59,18 @@ namespace WpfApp_GestioneAzienda
                 _azienda.ListaClienti.Add(
                     new Customer<decimal>("Giovanni", "Giorgio", new List<Acquisto<decimal>>() { new Acquisto<decimal>(Prodotti.Condensatore, 2400m) })
                     );
+                _toSave = true;
             }
             else
             {
                 Carica();
+                _toSave = false;
             }
 
 
             foreach (string s in Enum.GetNames(typeof(Prodotti)))
                 cmbListaAcquisti.Items.Add(s);
             
-            _caricato = false;
-
             lstDipendenti.ItemsSource = _azienda.ListaDipendenti;
             lstClienti.ItemsSource = _azienda.ListaClienti;
 
@@ -80,12 +81,33 @@ namespace WpfApp_GestioneAzienda
             Reset();
             
         }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_toSave)
+            {
+                MessageBoxResult mgb = MessageBox.Show("Salvare prima di uscire?", "Proposta salvataggio", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+                if (mgb == MessageBoxResult.Yes)
+                {
+                    Salva();
+                }
+                else if (mgb == MessageBoxResult.Cancel)
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
 
+        #endregion
+
+        #region Radio Button
+        
         private void rdbPerson_Changed(object sender, RoutedEventArgs e)
         {
             OttieniRuolo();
             CaricaInterfacciaPersona();
         }
+
+        #endregion
 
         #region Bottoni
 
@@ -159,6 +181,7 @@ namespace WpfApp_GestioneAzienda
 
             lstDipendenti.Items.Refresh();
             lstClienti.Items.Refresh();
+            _toSave = true;
             Reset();
         }
         private void btnAggiungiAcquisto_Click(object sender, RoutedEventArgs e)
@@ -301,9 +324,50 @@ namespace WpfApp_GestioneAzienda
             
             ModalitaModifica(false);
             AccessoInput(false);
-
+            _toSave = true;
             
         }
+        private void btnNuovaPersona_Click(object sender, RoutedEventArgs e)
+        {
+            // Farà da solo il metodo Reset
+            lstDipendenti.SelectedIndex = -1;
+            lstClienti.SelectedIndex = -1;
+            ModalitaModifica(false);
+
+            btnAggiungiAllaAzienda.Visibility = Visibility.Visible;
+            btnNuovaPersona.Visibility = Visibility.Collapsed;
+
+
+        }
+        private void btnRimuoviPersona_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult mbr = MessageBox.Show(
+                $"Sei sicuro di voler rimuovere \"{txtNome.Text} {txtCognome.Text}\"?",
+                "Conferma rimozione",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question
+            );
+
+            if (mbr == MessageBoxResult.No)
+            {
+                MessageBox.Show("Rimozione annullata.", "Rimozione annullata.",MessageBoxButton.OK,MessageBoxImage.Information);
+                return;
+            }
+
+
+            if (_personaCorrente.GetType() == typeof(Customer<decimal>))
+            {
+                _azienda.ListaClienti.RemoveAt(lstClienti.SelectedIndex);
+                lstClienti.Items.Refresh();
+            }
+            else if (_personaCorrente.GetType() == typeof(Employee<decimal>))
+            {
+                _azienda.ListaDipendenti.RemoveAt(lstDipendenti.SelectedIndex);
+                lstDipendenti.Items.Refresh();
+            }
+            _toSave = true;
+        }
+
 
         #endregion
 
@@ -314,14 +378,15 @@ namespace WpfApp_GestioneAzienda
 
             if (lstClienti.SelectedIndex == -1)
             {
-                Reset();
                 ModalitaModifica(false);
+                Reset();
                 return;
             }
 
             lstDipendenti.SelectedIndex = -1;
 
             btnModifica.IsEnabled = true;
+            btnRimuovi.IsEnabled = true;
 
             Customer<decimal> c = _azienda.ListaClienti[lstClienti.SelectedIndex];
             _personaCorrente = c;
@@ -342,6 +407,7 @@ namespace WpfApp_GestioneAzienda
             lstClienti.SelectedIndex = -1;
 
             btnModifica.IsEnabled = true;
+            btnRimuovi.IsEnabled = true;
 
             Employee<decimal> emp = _azienda.ListaDipendenti[lstDipendenti.SelectedIndex];
             _personaCorrente = emp;
@@ -353,6 +419,21 @@ namespace WpfApp_GestioneAzienda
 
         #endregion
 
+        #region Text Box
+
+        private void txtBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox txt = (TextBox)sender;
+            RimuoviPlaceholder(txt);
+        }
+        private void txtBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox txt = (TextBox)sender;
+            ImpostaPlaceholder(txt, (txt.Tag as string).Split('#')[0]);
+        }
+        
+        #endregion
+       
         #endregion
 
         private void OttieniRuolo()
@@ -456,7 +537,11 @@ namespace WpfApp_GestioneAzienda
             lstAcquisti.ItemsSource = null;
 
             btnModifica.IsEnabled = false;
-            
+            btnRimuovi.IsEnabled = false;
+
+            btnAggiungiAllaAzienda.Visibility = Visibility.Visible;
+            btnNuovaPersona.Visibility = Visibility.Collapsed;
+
             ImpostaPlaceholder(txtNome, "Inserisci nome");
             ImpostaPlaceholder(txtCognome, "Inserisci cognome");
             ImpostaPlaceholder(txtStipendio, "Inserisci stipendio annuo");
@@ -497,19 +582,7 @@ namespace WpfApp_GestioneAzienda
             }
         }
 
-        private void btnNuovaPersona_Click(object sender, RoutedEventArgs e)
-        {
-            // Farà da solo il metodo Reset
-            lstDipendenti.SelectedIndex = -1;
-            lstClienti.SelectedIndex = -1;
-            ModalitaModifica(false);
-
-            btnAggiungiAllaAzienda.Visibility = Visibility.Visible;
-            btnNuovaPersona.Visibility = Visibility.Collapsed;
-
-
-        }
-
+ 
         private void ImpostaPlaceholder(TextBox txt, string placeholder)
         {
             if (txt.Text == "")
@@ -532,30 +605,8 @@ namespace WpfApp_GestioneAzienda
             }
         }
    
-        private void txtBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox txt = (TextBox)sender;
-            RimuoviPlaceholder(txt);
-        }
-        private void txtBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox txt = (TextBox)sender;
-            ImpostaPlaceholder(txt, (txt.Tag as string).Split('#')[0]);
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            MessageBoxResult mgb = MessageBox.Show("Salvare prima di uscire?","Proposta salvataggio",MessageBoxButton.YesNoCancel,MessageBoxImage.Question);
-            if (mgb == MessageBoxResult.Yes)
-            {
-                Salva();
-            }
-            else if (mgb != MessageBoxResult.Cancel)
-            {
-                e.Cancel = true;
-            }
-        }
-
+        #region JSON
+        
         private void Salva()
         {
             JsonSerializer js = new JsonSerializer();
@@ -573,7 +624,12 @@ namespace WpfApp_GestioneAzienda
             {
                 using (JsonReader jsonReader = new JsonTextReader(sr))
                     _azienda = (Company<decimal>)js.Deserialize(jsonReader, typeof(Company<decimal>));
+                
             }
+            if (_azienda == null)
+                _azienda = new Company<decimal>();
         }
+        
+        #endregion
     }
 }

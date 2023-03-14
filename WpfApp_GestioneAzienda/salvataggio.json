@@ -1,51 +1,14 @@
 {
   "ListaDipendenti": [
     {
-      "StipendioAnnuo": 1200.00,
-      "ID": "f4f8b6ef-8929-4890-852d-319536c6d595",
-      "Nome": "Giorgio",
-      "Cognome": "Rossi"
-    },
-    {
-      "StipendioAnnuo": 3000.90,
-      "ID": "4c2c7c26-4dd5-4540-bcd5-a21e69622a71",
-      "Nome": "Annamaria",
-      "Cognome": "Grondaia"
+      "StipendioAnnuo": 2.0,
+      "ID": "8c34c07e-ee7f-4183-b1f8-d9e789a00782",
+      "Nome": "Anf",
+      "Cognome": "qwe"
     }
   ],
-  "ListaClienti": [
-    {
-      "ListaAcquisti": [
-        {
-          "Price": 0.0,
-          "Tipo": 0,
-          "Note": null
-        }
-      ],
-      "ID": "4729355f-e570-49bc-9e5b-362da1c3a88c",
-      "Nome": "Alberto",
-      "Cognome": "Giacomini"
-    },
-    {
-      "ListaAcquisti": [
-        {
-          "Price": 0.0,
-          "Tipo": 1,
-          "Note": null
-        }
-      ],
-      "ID": "fdf3ed41-6263-4c53-a0b6-52ddbb603cb7",
-      "Nome": "Giovanni",
-      "Cognome": "Giorgio"
-    },
-    {
-      "ListaAcquisti": [],
-      "ID": "1b0ff992-5bdf-4f5a-8de4-0ba37e0c8ee0",
-      "Nome": "And",
-      "Cognome": "Cas"
-    }
-  ],
-  "SpeseTotali": 4200.90,
+  "ListaClienti": [],
+  "SpeseTotali": 2.0,
   "EntrateTotali": 0.0,
   "ProfittoTotale": 0.0
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Controls;
+using Newtonsoft.Json;
 
 namespace SharedProject_Azienda
 {
@@ -7,7 +8,10 @@ namespace SharedProject_Azienda
     {
         Prodotti _tipo;
         int quantita;
+        
+        [JsonProperty]
         T _costo;
+        
         string _note;
         string _valuta;
 
@@ -22,6 +26,7 @@ namespace SharedProject_Azienda
         public T Price
         {
             get => _costo;
+            
         }
 
         public Prodotti Tipo

@@ -156,6 +156,11 @@
                         <!--Modifica-->
                         <Button d:Visibility="Visible" Margin="10,0,0,0" Visibility="Visible" x:Name="btnModifica" Content="Inizia modifica" MinWidth="95" Height="50" MinHeight="20" Click="btnModifica_Click"/>
                         <Button d:Visibility="Visible" Margin="10,0,0,0" Visibility="Collapsed" x:Name="btnConfermaModifica" Content="Conferma modifica" MinWidth="95" Height="50" MinHeight="20" Click="btnConfermaModifica_Click"/>
+                        
+                        
+                        <!--Rimuovi-->
+                        <Button d:Visibility="Visible" Margin="10,0,0,0" Visibility="Visible" x:Name="btnRimuovi" Content="Rimuovi" MinWidth="95" Height="50" MinHeight="20" Click="btnRimuoviPersona_Click"/>
+                        
                     </StackPanel>
                 </Grid>
             </GroupBox>
