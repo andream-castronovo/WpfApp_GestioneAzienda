@@ -11,6 +11,7 @@
         Loaded="Window_Loaded"
         MinWidth="500"
         MinHeight="270"
+        Closing="Window_Closing"
         >
 
     <Grid>

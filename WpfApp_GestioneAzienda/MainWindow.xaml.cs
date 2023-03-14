@@ -6,6 +6,8 @@ using System;
 using System.Windows.Media;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace WpfApp_GestioneAzienda
 {
@@ -14,13 +16,15 @@ namespace WpfApp_GestioneAzienda
     /// </summary>
     public partial class MainWindow : Window
     {
-        // TODO: Fare parte dei dati dell'azienda in XAML
         // TODO: Fare parte salvataggio e caricamento con JSON
+        // TODO: Fare parte dei dati dell'azienda in XAML
 
         public MainWindow()
         {
             InitializeComponent();
         }
+
+        const string SAVE_FILE_PATH = @"..\..\salvataggio.json";
 
         Company<decimal> _azienda;
         Persona<decimal> _personaCorrente;
@@ -35,22 +39,31 @@ namespace WpfApp_GestioneAzienda
             // Per usarlo è necessario aggiungere "m" alla fine del numero in modo
             // da differenziarlo dal double (usato di default per i numeri con la virgola in c#)
 
-            _azienda = new Company<decimal>();
+            if (!File.Exists(SAVE_FILE_PATH))
+            {
+                new StreamWriter(SAVE_FILE_PATH).Close();
 
-            _azienda.ListaDipendenti.Add(
-                new Employee<decimal>("Giorgio", "Rossi", 1200.00m)
-                );
-            _azienda.ListaDipendenti.Add(
-                new Employee<decimal>("Annamaria", "Grondaia", 3000.90m)
-                );
+                _azienda = new Company<decimal>();
 
+                _azienda.ListaDipendenti.Add(
+                    new Employee<decimal>("Giorgio", "Rossi", 1200.00m)
+                    );
+                _azienda.ListaDipendenti.Add(
+                    new Employee<decimal>("Annamaria", "Grondaia", 3000.90m)
+                    );
 
-            _azienda.ListaClienti.Add(
-                new Customer<decimal>("Alberto", "Giacomini", new List<Acquisto<decimal>>() { new Acquisto<decimal>(Prodotti.Resistore, 3200m) })
-                );
-            _azienda.ListaClienti.Add(
-                new Customer<decimal>("Giovanni", "Giorgio", new List<Acquisto<decimal>>() { new Acquisto<decimal>(Prodotti.Condensatore, 2400m) })
-                );
+                _azienda.ListaClienti.Add(
+                    new Customer<decimal>("Alberto", "Giacomini", new List<Acquisto<decimal>>() { new Acquisto<decimal>(Prodotti.Resistore, 3200m) })
+                    );
+                _azienda.ListaClienti.Add(
+                    new Customer<decimal>("Giovanni", "Giorgio", new List<Acquisto<decimal>>() { new Acquisto<decimal>(Prodotti.Condensatore, 2400m) })
+                    );
+            }
+            else
+            {
+                Carica();
+            }
+
 
             foreach (string s in Enum.GetNames(typeof(Prodotti)))
                 cmbListaAcquisti.Items.Add(s);
@@ -528,6 +541,39 @@ namespace WpfApp_GestioneAzienda
         {
             TextBox txt = (TextBox)sender;
             ImpostaPlaceholder(txt, (txt.Tag as string).Split('#')[0]);
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            MessageBoxResult mgb = MessageBox.Show("Salvare prima di uscire?","Proposta salvataggio",MessageBoxButton.YesNoCancel,MessageBoxImage.Question);
+            if (mgb == MessageBoxResult.Yes)
+            {
+                Salva();
+            }
+            else if (mgb != MessageBoxResult.Cancel)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void Salva()
+        {
+            JsonSerializer js = new JsonSerializer();
+            js.Formatting = Formatting.Indented;
+            using (StreamWriter sw = new StreamWriter(SAVE_FILE_PATH))
+            {
+                js.Serialize(sw, _azienda);
+            }
+        }
+        private void Carica()
+        {
+            JsonSerializer js = new JsonSerializer();
+            js.Formatting = Formatting.Indented;
+            using (StreamReader sr = File.OpenText(SAVE_FILE_PATH))
+            {
+                using (JsonReader jsonReader = new JsonTextReader(sr))
+                    _azienda = (Company<decimal>)js.Deserialize(jsonReader, typeof(Company<decimal>));
+            }
         }
     }
 }

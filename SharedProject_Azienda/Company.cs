@@ -60,8 +60,8 @@ namespace SharedProject_Azienda
         public T EntrateTotali 
         { 
             get 
-            { 
-                throw new NotImplementedException(); 
+            {
+                return default(T); // HACK: Cambiare il valore restituito
             } 
         }
 
@@ -69,7 +69,7 @@ namespace SharedProject_Azienda
         {
             get
             {
-                throw new NotImplementedException();
+                return default(T); // HACK: Cambiare il valore restituito
             }
         }
         #endregion
