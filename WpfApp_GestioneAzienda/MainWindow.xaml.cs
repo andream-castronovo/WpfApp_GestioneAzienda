@@ -55,28 +55,34 @@ namespace WpfApp_GestioneAzienda
             cmbListaAcquisti.SelectedIndex = -1;
             
             _caricato = false;
-            _controlloTxt = false;
-        }
 
-        private void btnGenerateDipendenti_Click(object sender, RoutedEventArgs e)
-        {
             lstDipendenti.ItemsSource = _azienda.ListaDipendenti;
+            lstClienti.ItemsSource = _azienda.ListaClienti;
+            
         }
 
+        private string OttieniRuolo()
+        {
+            if ((bool)rdbCliente.IsChecked)
+            {
+                _personaCorrente = new Customer<decimal>();
+                return "cliente";
+            }
+            else if ((bool)rdbImpiegato.IsChecked)
+            {
+                _personaCorrente = new Employee<decimal>();
+                return "dipendente";
+            }
+            else
+                throw new Exception("Non è stata effettuata la scelta tra cliente e dipendente");
+        }
         private void Check_Changed(object sender, RoutedEventArgs e)
         {
-            CaricaInterfacciaPersona();
+            CaricaInterfacciaPersona(OttieniRuolo());
         }
 
-        private void CaricaInterfacciaPersona()
+        private void CaricaInterfacciaPersona(string s)
         {
-            string s = null;
-            
-            if ((bool)rdbCliente.IsChecked)
-                s = "cliente";
-            else if ((bool)rdbImpiegato.IsChecked)
-                s = "dipendente";
-
             switch (s)
             {
                 case "cliente":
@@ -84,6 +90,7 @@ namespace WpfApp_GestioneAzienda
                     grpClienti.Visibility = Visibility.Visible;
                     if (!_caricato)
                         _personaCorrente = new Customer<decimal>();
+                    btnAggiungiAllaAzienda.Content = "Aggiungi Cliente";
                     break;
                 case "dipendente":
                     grpImpiegati.Visibility = Visibility.Visible;
@@ -92,6 +99,7 @@ namespace WpfApp_GestioneAzienda
                     cmbListaAcquisti.SelectedIndex = -1;
                     if (!_caricato)
                         _personaCorrente = new Employee<decimal>();
+                    btnAggiungiAllaAzienda.Content = "Aggiungi Dipendente";
                     break;
             }
         }
@@ -153,6 +161,9 @@ namespace WpfApp_GestioneAzienda
                 _azienda.ListaDipendenti.Add(emp);
                 _personaCorrente = new Employee<decimal>();
             }
+
+            lstDipendenti.Items.Refresh();
+            lstClienti.Items.Refresh();
         }
 
         private void MessaggioErrore(string messaggio)
@@ -200,56 +211,55 @@ namespace WpfApp_GestioneAzienda
                     )
                 );
 
-                Acquisto<decimal> a = c.ListaAcquisti[c.ListaAcquisti.Count - 1];
-                lstAcquisti.Items.Add(
-                    $"{a.Tipo} {a.Price:f2}€"
-                    );
-                
+                lstAcquisti.Items.Refresh();
             }
             catch (Exception ex)
             {
                 MessaggioErrore(ex.Message);
             }
         }
-        // TODO: Per placeholder nelle TextBox vedere evento: GotFocus
 
-        private void btnGenerateClienti_Click(object sender, RoutedEventArgs e)
-        {
-            lstClienti.Items.Clear();
-            foreach (Customer<decimal> c in _azienda.ListaClienti)
-            {
-                string s = c.OttieniAcquisti("\n\t\t","€");
-                lstClienti.Items.Add(c + (s.Length > 0 ? "\n\tLista acquisti:" : "") + s);
-            }
-        }
+        // TODO: Per placeholder nelle TextBox vedere evento: GotFocus
 
         private void lstClienti_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            
             if (lstClienti.SelectedIndex == -1)
+            {
+                Reset();
+                AccessoInput(true);
                 return;
+            }
+            
+            lstDipendenti.SelectedIndex = -1;
 
             Customer<decimal> c = _azienda.ListaClienti[lstClienti.SelectedIndex];
             _personaCorrente = c;
             
             CaricaDati(c);
-
+            ModalitaModifica(false);
         }
-
-        bool _controlloTxt;
-        private void txtBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void lstDipendenti_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (_controlloTxt)
+            if (lstDipendenti.SelectedIndex == -1)
             {
-                lstClienti.SelectedIndex = -1;
-                lstDipendenti.SelectedIndex = -1;
-                CaricaInterfacciaPersona();
+                Reset();
+                AccessoInput(true);
+                return;
             }
+
+            lstClienti.SelectedIndex = -1;
+            
+            Employee<decimal> emp = _azienda.ListaDipendenti[lstDipendenti.SelectedIndex];
+            _personaCorrente = emp;
+
+            CaricaDati(emp);
+            ModalitaModifica(false);
+
         }
+
         private void CaricaDati(Persona<decimal> p)
         {
-            _caricato = true;
-            _controlloTxt = false;
-
             txtNome.Text = p.Nome;
             txtCognome.Text = p.Cognome;
 
@@ -257,10 +267,7 @@ namespace WpfApp_GestioneAzienda
             {
                 Customer<decimal> c = (Customer<decimal>)p;
                 rdbCliente.IsChecked = true;
-                if (c.ListaAcquisti.Count > 0)
-                    lstAcquisti.ItemsSource = c.ListaAcquisti;
-                else
-                    lstAcquisti.Items.Clear();
+                lstAcquisti.ItemsSource = c.ListaAcquisti;
             }
             else if (p.GetType() == typeof(Employee<decimal>))
             {
@@ -268,10 +275,9 @@ namespace WpfApp_GestioneAzienda
                 rdbImpiegato.IsChecked = true;
                 txtStipendio.Text = emp.StipendioAnnuo + "";
             }
-            _controlloTxt = true;
         }
 
-        private void ResetInterfaccia()
+        private void Reset()
         {
             txtNome.Text = "";
             txtCognome.Text = "";
@@ -279,6 +285,53 @@ namespace WpfApp_GestioneAzienda
             txtPrezzoAcquisto.Text = "";
 
             rdbCliente.IsChecked = true;
+
+            lstAcquisti.ItemsSource = null;
+
+            OttieniRuolo();
+        }
+
+        private void AccessoInput(bool mod)
+        {
+            txtNome.IsEnabled = mod;
+            txtCognome.IsEnabled = mod;
+            txtStipendio.IsEnabled = mod;
+            txtPrezzoAcquisto.IsEnabled = mod;
+            txtStipendio.IsEnabled = mod;
+            btnAggiungiAcquisto.IsEnabled = mod;
+            cmbListaAcquisti.IsEnabled = mod;
+            lstAcquisti.IsEnabled = mod;
+        }
+
+        private void ModalitaModifica(bool mod)
+        {
+            if (mod)
+            {
+                btnModifica.Visibility = Visibility.Collapsed;
+                btnConfermaModifica.Visibility = Visibility.Visible;
+                AccessoInput(true);
+            }
+            else
+            {
+                btnModifica.Visibility = Visibility.Visible;
+                btnConfermaModifica.Visibility = Visibility.Collapsed;
+                AccessoInput(false);
+            }
+        }
+     
+        private void btnModifica_Click(object sender, RoutedEventArgs e)
+        {
+            if (lstClienti.SelectedIndex == -1 && lstDipendenti.SelectedIndex == -1)
+            {
+                MessageBox.Show("Devi selezionare dalle liste un dipendente o un cliente per modificarlo!");
+                return;
+            }
+
+            ModalitaModifica(true);
+        }
+        private void btnConfermaModifica_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

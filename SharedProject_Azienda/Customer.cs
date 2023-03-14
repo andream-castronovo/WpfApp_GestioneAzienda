@@ -29,14 +29,19 @@ namespace SharedProject_Azienda
             get => _listaAcquisti;
         }
 
-        public string OttieniAcquisti(string prefix, string valuta)
+        public string OttieniAcquisti(string prefix)
         {
             string s = "";
             foreach (Acquisto<T> a in _listaAcquisti)
             {
-                s += prefix + a + valuta;
+                s += prefix + a;
             }
             return s;
+        }
+
+        public override string ToString()
+        {
+            return base.ToString() + "\nLista acquisti:" + OttieniAcquisti("\n\t");
         }
     }
 }

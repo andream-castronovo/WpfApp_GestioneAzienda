@@ -9,11 +9,14 @@ namespace SharedProject_Azienda
         int quantita;
         T _costo;
         string _note;
-        public Acquisto(Prodotti tipo, T costo, string note = null)
+        string _valuta;
+
+        public Acquisto(Prodotti tipo, T costo, string valuta="€" ,string note = null)
         {
             _tipo = tipo;
             _costo = costo;
             _note = note;
+            _valuta = valuta;
         }
 
         public T Price
@@ -36,7 +39,7 @@ namespace SharedProject_Azienda
 
         public override string ToString()
         {
-            return _tipo.ToString() + $" {_costo:f2}";
+            return _tipo.ToString() + $" {_costo:f2}" + _valuta;
         }
     }
 }

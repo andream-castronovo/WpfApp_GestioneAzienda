@@ -6,6 +6,7 @@ namespace SharedProject_Azienda
 {
     class Employee<T> : Persona<T> where T : struct
     {
+        private string _valuta = "€";
         private T _stipendioAnnuo;
 
         public Employee() : base()
@@ -27,15 +28,30 @@ namespace SharedProject_Azienda
             }
         }
 
+        /// <summary>
+        /// Calcolo stipendio mensile con tredicesima
+        /// </summary>
+        /// <returns>Stipendio mensile + tredicesima</returns>
+        /// <exception cref="Exception">Parametro di tipo non numerico</exception>
         public override T GetEconomicValue()
         {
-            // TODO
-            throw new NotImplementedException();
+            T a;
+            
+            try
+            {
+                a = (dynamic)_stipendioAnnuo / 13; 
+            }
+            catch
+            {
+                throw new Exception("Il parametro ti tipo non è numerico.");
+            }
+
+            return a;
         }
 
         public override string ToString()
         {
-            return base.ToString() + $"\nStipendio annuo:\n\t{_stipendioAnnuo}";
+            return base.ToString() + $"\nStipendio annuo:\n\t{_stipendioAnnuo}"+_valuta;
         }
     }
 }

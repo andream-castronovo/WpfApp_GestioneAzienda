@@ -59,7 +59,7 @@
                         </Grid.RowDefinitions>
 
                         <Label Grid.ColumnSpan="2" Grid.RowSpan="2" Content="Nome" HorizontalAlignment="Center"/>
-                        <TextBox TextChanged="txtBox_TextChanged" x:Name="txtNome" Grid.Row="1" Grid.Column="1" d:Text="Nome" MaxWidth="150" MinWidth="70"/>
+                        <TextBox x:Name="txtNome" Grid.Row="1" Grid.Column="1" d:Text="Nome" MaxWidth="150" MinWidth="70"/>
                     </Grid>
                 
                     <!--Cognome-->
@@ -70,14 +70,14 @@
                         </Grid.RowDefinitions>
 
                         <Label Grid.ColumnSpan="2" Grid.RowSpan="2" Content="Cognome" HorizontalAlignment="Center"/>
-                        <TextBox TextChanged="txtBox_TextChanged" x:Name="txtCognome" Grid.Row="1" Grid.Column="1" d:Text="Cognome" MaxWidth="150" MinWidth="70"/>
+                        <TextBox x:Name="txtCognome" Grid.Row="1" Grid.Column="1" d:Text="Cognome" MaxWidth="150" MinWidth="70"/>
                     </Grid>
 
                     <!--<Label HorizontalContentAlignment="Right" Grid.Row="0" Grid.Column="0" Content="Nome " Padding="4"/>
                     <Label HorizontalContentAlignment="Right" Grid.Row="0" Grid.Column="2" Content="Cognome " Padding="4"/>
 
-                    <TextBox TextChanged="txtBox_TextChanged" Grid.Row="0" Grid.Column="1" Name="txtName" Padding="4" Width="100"/>
-                    <TextBox TextChanged="txtBox_TextChanged" Grid.Row="0" Grid.Column="3" Name="txtSurname" Padding="4" Width="100"/>-->
+                    <TextBox Grid.Row="0" Grid.Column="1" Name="txtName" Padding="4" Width="100"/>
+                    <TextBox Grid.Row="0" Grid.Column="3" Name="txtSurname" Padding="4" Width="100"/>-->
                 </Grid>
 
 
@@ -85,7 +85,7 @@
         
         
             <!--Input Impiegati-->
-            <GroupBox Name="grpImpiegati" Visibility="Hidden" d:Visibility="Hidden" Header="Impiegati" Grid.Row="1">
+            <GroupBox Name="grpImpiegati" Visibility="Hidden" d:Visibility="Visible" Header="Impiegati" Grid.Row="1">
                 <Grid Margin="2"> <!--Stipendio annuo-->
                     <Grid.RowDefinitions>
                         <RowDefinition Height="22"/>
@@ -93,12 +93,12 @@
                     </Grid.RowDefinitions>
 
                     <Label Grid.ColumnSpan="2" Grid.RowSpan="2" Content="Stipendio annuo" HorizontalAlignment="Center"/>
-                    <TextBox TextChanged="txtBox_TextChanged" x:Name="txtStipendio" Grid.Row="1" Grid.Column="1" d:Text="Stipendio annuo" MaxWidth="150" MinWidth="70"/>
+                    <TextBox x:Name="txtStipendio" Grid.Row="1" Grid.Column="1" d:Text="Stipendio annuo" MaxWidth="150" MinWidth="70"/>
                 </Grid>
             </GroupBox>
 
             <!--Input Clienti-->
-            <GroupBox Name="grpClienti" Visibility="Hidden" d:Visibility="Visible" Header="Clienti" Grid.Row="1">
+            <GroupBox Name="grpClienti" Visibility="Hidden" d:Visibility="Hidden" Header="Clienti" Grid.Row="1">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -128,7 +128,7 @@
 
                             <Label Grid.ColumnSpan="2" Grid.RowSpan="2" Content="Acquisto" HorizontalAlignment="Center"/>
                             <ComboBox Grid.Row="1" Name="cmbListaAcquisti" d:ItemsSource="{d:SampleData}" SelectedIndex="0"/>
-                            <TextBox TextChanged="txtBox_TextChanged" Grid.Row="1" Grid.Column="1" x:Name="txtPrezzoAcquisto"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtPrezzoAcquisto"/>
                             <Button  Grid.ColumnSpan="2" Grid.Row="2" x:Name="btnAggiungiAcquisto" Content="Aggiungi acquisto" Click="btnAggiungiAcquisto_Click"/>
                         </Grid>
                     </Grid>
@@ -143,38 +143,32 @@
                 
             </GroupBox>
 
-
-            <Button x:Name="btnAggiungiAllaAzienda" Content="Aggiungi Cliente" Grid.Row="2" Width="100" MinWidth="95" Height="50" MinHeight="20" Click="btnAggiungiAllaAzienda_Click"/>
+            
+            <!--Aggiunta di persona-->
+            <GroupBox Grid.Row="2" Visibility="Visible" Name="grpAggiunta" Header="Modalità aggiunta" >
+                <Grid>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Button x:Name="btnAggiungiAllaAzienda" Content="Aggiungi Cliente" MinWidth="95" Height="50" MinHeight="20" Click="btnAggiungiAllaAzienda_Click"/>
+                        <Button Margin="10,0,0,0" Visibility="Visible" x:Name="btnModifica" Content="Inizia modifica" MinWidth="95" Height="50" MinHeight="20" Click="btnModifica_Click"/>
+                        <Button Margin="10,0,0,0" Visibility="Collapsed" x:Name="btnConfermaModifica" Content="Conferma modifica" MinWidth="95" Height="50" MinHeight="20" Click="btnConfermaModifica_Click"/>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+            
         </Grid>
         
         
         <!--Lista dipendenti-->
         <GroupBox Visibility="Visible" d:Visibility="Visible" Header="Lista dipendenti" Grid.Row="1">
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height=".1*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <Button Content="Genera lista dipendenti" x:Name="btnGenerateDipendenti" Click="btnGenerateDipendenti_Click"/>
-
-                <ListBox Grid.Row="1" x:Name="lstDipendenti" Margin="2" d:ItemsSource="{d:SampleData}"/>
-
+                <ListBox Grid.Row="1" x:Name="lstDipendenti" Margin="2" d:ItemsSource="{d:SampleData}" SelectionChanged="lstDipendenti_SelectionChanged"/>
             </Grid>
         </GroupBox>
         
         <!--Lista clienti-->
         <GroupBox Visibility="Visible" d:Visibility="Visible" Header="Lista clienti" Grid.Column="2">
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height=".1*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <Button Content="Genera lista clienti" x:Name="btnGenerateClienti" Click="btnGenerateClienti_Click"/>
-
                 <ListBox SelectionChanged="lstClienti_SelectionChanged" Grid.Row="1" x:Name="lstClienti" Margin="2" d:ItemsSource="{d:SampleData}"/>
-
             </Grid>
         </GroupBox>
 
