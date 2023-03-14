@@ -41,7 +41,7 @@ namespace SharedProject_Azienda
 
         public override string ToString()
         {
-            return base.ToString() + "\nLista acquisti:" + OttieniAcquisti("\n\t");
+            return base.ToString() + (_listaAcquisti.Count > 0 ? "\nLista acquisti:" : "") + OttieniAcquisti("\n\t");
         }
     }
 }

@@ -39,8 +39,8 @@
                 <!--Scelta cliente o impiegato-->
                 <Viewbox MaxHeight="20" MinHeight="20" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0"> <!--Per modificare grandezza radio button-->
                     <StackPanel Orientation="Horizontal">
-                        <RadioButton Name="rdbCliente" Content="Cliente" Checked="Check_Changed" Tag="cliente"/>
-                        <RadioButton Name="rdbImpiegato" Content="Impiegato" Margin="10,0,0,0" Checked="Check_Changed" Tag="dipendente"/>
+                        <RadioButton Name="rdbCliente" Content="Cliente" Checked="rdbPerson_Changed" Tag="cliente"/>
+                        <RadioButton Name="rdbImpiegato" Content="Impiegato" Margin="10,0,0,0" Checked="rdbPerson_Changed" Tag="dipendente"/>
                     </StackPanel>
                 </Viewbox>
 
@@ -59,7 +59,7 @@
                         </Grid.RowDefinitions>
 
                         <Label Grid.ColumnSpan="2" Grid.RowSpan="2" Content="Nome" HorizontalAlignment="Center"/>
-                        <TextBox x:Name="txtNome" Grid.Row="1" Grid.Column="1" d:Text="Nome" MaxWidth="150" MinWidth="70"/>
+                        <TextBox LostFocus="txtBox_LostFocus"  GotFocus="txtBox_GotFocus" x:Name="txtNome" Grid.Row="1" Grid.Column="1" d:Text="Nome" MaxWidth="150" MinWidth="70"/>
                     </Grid>
                 
                     <!--Cognome-->
@@ -70,14 +70,14 @@
                         </Grid.RowDefinitions>
 
                         <Label Grid.ColumnSpan="2" Grid.RowSpan="2" Content="Cognome" HorizontalAlignment="Center"/>
-                        <TextBox x:Name="txtCognome" Grid.Row="1" Grid.Column="1" d:Text="Cognome" MaxWidth="150" MinWidth="70"/>
+                        <TextBox LostFocus="txtBox_LostFocus"  GotFocus="txtBox_GotFocus" x:Name="txtCognome" Grid.Row="1" Grid.Column="1" d:Text="Cognome" MaxWidth="150" MinWidth="70"/>
                     </Grid>
 
                     <!--<Label HorizontalContentAlignment="Right" Grid.Row="0" Grid.Column="0" Content="Nome " Padding="4"/>
                     <Label HorizontalContentAlignment="Right" Grid.Row="0" Grid.Column="2" Content="Cognome " Padding="4"/>
 
-                    <TextBox Grid.Row="0" Grid.Column="1" Name="txtName" Padding="4" Width="100"/>
-                    <TextBox Grid.Row="0" Grid.Column="3" Name="txtSurname" Padding="4" Width="100"/>-->
+                    <TextBox LostFocus="txtBox_LostFocus"  GotFocus="txtBox_GotFocus" Grid.Row="0" Grid.Column="1" Name="txtName" Padding="4" Width="100"/>
+                    <TextBox LostFocus="txtBox_LostFocus"  GotFocus="txtBox_GotFocus" Grid.Row="0" Grid.Column="3" Name="txtSurname" Padding="4" Width="100"/>-->
                 </Grid>
 
 
@@ -93,7 +93,7 @@
                     </Grid.RowDefinitions>
 
                     <Label Grid.ColumnSpan="2" Grid.RowSpan="2" Content="Stipendio annuo" HorizontalAlignment="Center"/>
-                    <TextBox x:Name="txtStipendio" Grid.Row="1" Grid.Column="1" d:Text="Stipendio annuo" MaxWidth="150" MinWidth="70"/>
+                    <TextBox LostFocus="txtBox_LostFocus"  GotFocus="txtBox_GotFocus" x:Name="txtStipendio" Grid.Row="1" Grid.Column="1" d:Text="Stipendio annuo" MaxWidth="150" MinWidth="70"/>
                 </Grid>
             </GroupBox>
 
@@ -128,7 +128,7 @@
 
                             <Label Grid.ColumnSpan="2" Grid.RowSpan="2" Content="Acquisto" HorizontalAlignment="Center"/>
                             <ComboBox Grid.Row="1" Name="cmbListaAcquisti" d:ItemsSource="{d:SampleData}" SelectedIndex="0"/>
-                            <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtPrezzoAcquisto"/>
+                            <TextBox LostFocus="txtBox_LostFocus"  GotFocus="txtBox_GotFocus" Grid.Row="1" Grid.Column="1" x:Name="txtPrezzoAcquisto"/>
                             <Button  Grid.ColumnSpan="2" Grid.Row="2" x:Name="btnAggiungiAcquisto" Content="Aggiungi acquisto" Click="btnAggiungiAcquisto_Click"/>
                         </Grid>
                     </Grid>
@@ -148,9 +148,13 @@
             <GroupBox Grid.Row="2" Visibility="Visible" Name="grpAggiunta" Header="Modalità aggiunta" >
                 <Grid>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Button x:Name="btnAggiungiAllaAzienda" Content="Aggiungi Cliente" MinWidth="95" Height="50" MinHeight="20" Click="btnAggiungiAllaAzienda_Click"/>
-                        <Button Margin="10,0,0,0" Visibility="Visible" x:Name="btnModifica" Content="Inizia modifica" MinWidth="95" Height="50" MinHeight="20" Click="btnModifica_Click"/>
-                        <Button Margin="10,0,0,0" Visibility="Collapsed" x:Name="btnConfermaModifica" Content="Conferma modifica" MinWidth="95" Height="50" MinHeight="20" Click="btnConfermaModifica_Click"/>
+                        <!--Aggiunta-->
+                        <Button d:Visibility="Visible" Visibility="Visible" x:Name="btnAggiungiAllaAzienda" Content="Aggiungi Cliente" MinWidth="95" Height="50" MinHeight="20" Click="btnAggiungiAllaAzienda_Click"/>
+                        <Button d:Visibility="Visible" Visibility="Collapsed" d:Margin="10,0,0,0" x:Name="btnNuovaPersona" Content="Aggiungi nuovo" MinWidth="95" Height="50" MinHeight="20" Click="btnNuovaPersona_Click"/>
+                        
+                        <!--Modifica-->
+                        <Button d:Visibility="Visible" Margin="10,0,0,0" Visibility="Visible" x:Name="btnModifica" Content="Inizia modifica" MinWidth="95" Height="50" MinHeight="20" Click="btnModifica_Click"/>
+                        <Button d:Visibility="Visible" Margin="10,0,0,0" Visibility="Collapsed" x:Name="btnConfermaModifica" Content="Conferma modifica" MinWidth="95" Height="50" MinHeight="20" Click="btnConfermaModifica_Click"/>
                     </StackPanel>
                 </Grid>
             </GroupBox>
