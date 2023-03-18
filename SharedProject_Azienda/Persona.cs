@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Controls;
+using Newtonsoft.Json;
 
 namespace SharedProject_Azienda
 {
@@ -17,10 +15,10 @@ namespace SharedProject_Azienda
         Guid _id;
         #endregion
 
-        
         private static List<Guid> _allIds = new List<Guid>();
 
         #region Proprietà
+        [JsonProperty]
         public Guid ID 
         {
             get => _id;
@@ -50,11 +48,26 @@ namespace SharedProject_Azienda
         private static Guid GeneraGUID()
         {
             Guid id = Guid.NewGuid();
-            
             while (_allIds.Contains(id))
                 id = Guid.NewGuid();
             
             return id;
+        }
+
+        static public void CaricaID(List<Persona<T>> lst)
+        {
+            lst = lst ?? new List<Persona<T>>();
+
+            foreach (Persona<T> p in lst) 
+            { 
+                _allIds.Add(p.ID);
+            }
+        }
+
+        static public void RimuoviID(Persona<T> p)
+        {
+            if (p != null)
+                _allIds.Remove(p.ID);
         }
 
         public abstract T GetEconomicValue();

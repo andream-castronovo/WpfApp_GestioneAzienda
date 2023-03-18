@@ -158,6 +158,7 @@ namespace WpfApp_GestioneAzienda
 
                 _azienda.ListaClienti.Add(c);
                 _personaCorrente = new Customer<decimal>();
+
             }
             else if ((bool)rdbImpiegato.IsChecked)
             {
@@ -440,10 +441,12 @@ namespace WpfApp_GestioneAzienda
         {
             if ((bool)rdbCliente.IsChecked)
             {
+                Persona<decimal>.RimuoviID(_personaCorrente);
                 _personaCorrente = new Customer<decimal>();
             }
             else if ((bool)rdbImpiegato.IsChecked)
             {
+                Persona<decimal>.RimuoviID(_personaCorrente);
                 _personaCorrente = new Employee<decimal>();
             }
             else
@@ -605,10 +608,12 @@ namespace WpfApp_GestioneAzienda
             }
         }
    
+        
         #region JSON
         
         private void Salva()
         {
+            Persona<decimal>.RimuoviID(_personaCorrente);
             JsonSerializer js = new JsonSerializer();
             js.Formatting = Formatting.Indented;
             using (StreamWriter sw = new StreamWriter(SAVE_FILE_PATH))
@@ -628,8 +633,15 @@ namespace WpfApp_GestioneAzienda
             }
             if (_azienda == null)
                 _azienda = new Company<decimal>();
+
+            Persona<decimal>.CaricaID(
+                _azienda.ListaClienti.Cast<Persona<decimal>>().ToList()
+                );
+            Persona<decimal>.CaricaID(
+                _azienda.ListaDipendenti.Cast<Persona<decimal>>().ToList()
+                );
+
         }
-        
         #endregion
     }
 }
