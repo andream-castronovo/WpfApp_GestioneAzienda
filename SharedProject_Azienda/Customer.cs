@@ -13,8 +13,10 @@ namespace SharedProject_Azienda
 
         List<Acquisto<T>> _listaAcquisti;
 
-        public Customer() : this ("<no_name>","<no_surname>")
-        {}
+        public Customer() : base ()
+        {
+            _listaAcquisti = new List<Acquisto<T>>();
+        }
 
         public Customer(string name, string surname) : this(name, surname, new List<Acquisto<T>>())
         {}
@@ -27,6 +29,7 @@ namespace SharedProject_Azienda
         public List<Acquisto<T>> ListaAcquisti
         {
             get => _listaAcquisti;
+            set => _listaAcquisti = value;
         }
 
         public string OttieniAcquisti(string prefix)

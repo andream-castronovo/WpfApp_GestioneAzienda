@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using System.IO;
+using System.Threading;
 
 namespace WpfApp_GestioneAzienda
 {
@@ -27,7 +28,7 @@ namespace WpfApp_GestioneAzienda
         const string SAVE_FILE_PATH = @"..\..\salvataggio.json";
 
         Company<decimal> _azienda;
-        Persona<decimal> _personaCorrente;
+        List<Acquisto<decimal>> _acquistiCorrenti;
         bool _toSave;
         #region Eventi
 
@@ -39,7 +40,9 @@ namespace WpfApp_GestioneAzienda
             // più preciso rispetto a double e float; utile per le valute.
             // Per usarlo è necessario aggiungere "m" alla fine del numero in modo
             // da differenziarlo dal double (usato di default per i numeri con la virgola in c#)
-
+            
+            new Thread(Persona<decimal>.Test).Start();
+            
             if (!File.Exists(SAVE_FILE_PATH))
             {
                 new StreamWriter(SAVE_FILE_PATH).Close();
@@ -79,8 +82,11 @@ namespace WpfApp_GestioneAzienda
             rdbCliente.IsChecked = true;
 
             Reset();
+
+            _acquistiCorrenti = new List<Acquisto<decimal>>();
+
             
-        }
+         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (_toSave)
@@ -103,7 +109,6 @@ namespace WpfApp_GestioneAzienda
         
         private void rdbPerson_Changed(object sender, RoutedEventArgs e)
         {
-            OttieniRuolo();
             CaricaInterfacciaPersona();
         }
 
@@ -113,7 +118,8 @@ namespace WpfApp_GestioneAzienda
 
         private void btnAggiungiAllaAzienda_Click(object sender, RoutedEventArgs e)
         {
-            
+            string nome;
+            string cognome;
 
             try
             {
@@ -122,8 +128,8 @@ namespace WpfApp_GestioneAzienda
                 if (IsPlaceholder(txtCognome))
                     throw new Exception("Il cognome è vuoto");
 
-                _personaCorrente.Nome = ControllaStringa(txtNome.Text, seVuota:"Il nome è vuoto");
-                _personaCorrente.Cognome = ControllaStringa(txtCognome.Text, seVuota:"Il cognome è vuoto");
+                nome = ControllaStringa(txtNome.Text, seVuota:"Il nome è vuoto");
+                cognome = ControllaStringa(txtCognome.Text, seVuota:"Il cognome è vuoto");
             }
             catch (Exception ex)
             {
@@ -133,9 +139,7 @@ namespace WpfApp_GestioneAzienda
 
             if ((bool)rdbCliente.IsChecked)
             {
-                Customer<decimal> c = (Customer<decimal>)_personaCorrente;
-
-                if (c.ListaAcquisti.Count == 0)
+                if (_acquistiCorrenti.Count == 0)
                 {
                     MessageBoxResult risposta = MessageBox.Show(
                         "Sei sicuro di voler aggiungere un cliente senza acquisti?\n(Potrai aggiungere acquisti anche dopo averlo aggiunto)",
@@ -156,19 +160,24 @@ namespace WpfApp_GestioneAzienda
                     }
                 }
 
-                _azienda.ListaClienti.Add(c);
-                _personaCorrente = new Customer<decimal>();
-
+                _azienda.ListaClienti.Add(
+                    new Customer<decimal>(
+                        nome,
+                        cognome,
+                        _acquistiCorrenti
+                        )
+                    );
+                _acquistiCorrenti = new List<Acquisto<decimal>>();
             }
             else if ((bool)rdbImpiegato.IsChecked)
             {
-                Employee<decimal> emp = (Employee<decimal>)_personaCorrente;
+                decimal stipendio;
                 try
                 {
                     if (IsPlaceholder(txtStipendio))
                         throw new Exception("Lo stipendio è vuoto");
 
-                    emp.StipendioAnnuo = decimal.Parse(ControllaStringa(txtStipendio.Text, seVuota:"Lo stipendio è vuoto"));
+                    stipendio = decimal.Parse(ControllaStringa(txtStipendio.Text, seVuota:"Lo stipendio è vuoto"));
                 }
                 catch (Exception ex)
                 {
@@ -176,8 +185,14 @@ namespace WpfApp_GestioneAzienda
                     return;
                 }
 
-                _azienda.ListaDipendenti.Add(emp);
-                _personaCorrente = new Employee<decimal>();
+                _azienda.ListaDipendenti.Add(
+                    new Employee<decimal>(
+                        nome,
+                        cognome,
+                        stipendio
+                        )
+                    );
+                
             }
 
             lstDipendenti.Items.Refresh();
@@ -187,19 +202,15 @@ namespace WpfApp_GestioneAzienda
         }
         private void btnAggiungiAcquisto_Click(object sender, RoutedEventArgs e)
         {
-
             try
             {
-                
-                Customer<decimal> c = (Customer<decimal>)_personaCorrente;
-                
                 if (lstAcquisti.ItemsSource == null)
-                    lstAcquisti.ItemsSource = c.ListaAcquisti;
+                    lstAcquisti.ItemsSource = _acquistiCorrenti;
                 
                 if (IsPlaceholder(txtPrezzoAcquisto))
                     throw new Exception("Il prezzo è vuoto");
 
-                c.ListaAcquisti.Add(
+                _acquistiCorrenti.Add(
                     new Acquisto<decimal>(
                         (Prodotti)OttieniNumByNome(
                             ControllaStringa((string)cmbListaAcquisti.SelectedItem, "Seleziona qualcosa dalla lista di prodotti acquistabili!"),
@@ -225,8 +236,8 @@ namespace WpfApp_GestioneAzienda
         }
         private void btnConfermaModifica_Click(object sender, RoutedEventArgs e)
         {
-            Type tipoPersona = _personaCorrente.GetType();
-
+            string nome;
+            string cognome;
             try
             {
                 if (IsPlaceholder(txtNome))
@@ -234,8 +245,8 @@ namespace WpfApp_GestioneAzienda
                 if (IsPlaceholder(txtCognome))
                     throw new Exception("Il cognome è vuoto");
 
-                _personaCorrente.Nome = ControllaStringa(txtNome.Text, seVuota: "Il nome è vuoto");
-                _personaCorrente.Cognome = ControllaStringa(txtCognome.Text, seVuota: "Il cognome è vuoto");
+                nome = ControllaStringa(txtNome.Text, seVuota: "Il nome è vuoto");
+                cognome = ControllaStringa(txtCognome.Text, seVuota: "Il cognome è vuoto");
             }
             catch (Exception ex)
             {
@@ -243,16 +254,16 @@ namespace WpfApp_GestioneAzienda
                 return;
             }
 
-            if (tipoPersona == typeof(Employee<decimal>))
+            if ((bool)rdbImpiegato.IsChecked)
             {
-                Employee<decimal> emp = (Employee<decimal>)_personaCorrente;
+                decimal stipendio;
 
-                if (IsPlaceholder(txtStipendio))
-                    throw new Exception("Lo stipendio è vuoto");
-
+                
                 try
                 {
-                    emp.StipendioAnnuo = decimal.Parse(ControllaStringa(txtStipendio.Text, seVuota:"Lo stipendio è vuoto"));
+                    if (IsPlaceholder(txtStipendio))
+                        throw new Exception("Lo stipendio è vuoto");
+                    stipendio = decimal.Parse(ControllaStringa(txtStipendio.Text, seVuota:"Lo stipendio è vuoto"));
                 }
                 catch (Exception ex)
                 {
@@ -260,28 +271,45 @@ namespace WpfApp_GestioneAzienda
                     return;
                 }
 
+
                 if (lstDipendenti.SelectedIndex == -1) // Presumo di star cambiando un cliente in dipendente
                 {
-                    int tmp = lstClienti.SelectedIndex;
-                    _azienda.ListaClienti.RemoveAt(tmp);
-                    _azienda.ListaDipendenti.Add(emp);
+                    Employee<decimal> emp = new Employee<decimal>(
+                        nome,
+                        cognome,
+                        stipendio
+                    );
+                    Persona<decimal>.RimuoviID(emp); // Tolgo l'ID del nuovo dipendente visto che sarà lo stesso del cliente
+
+                    int tmp = lstClienti.SelectedIndex; // Salvo l'indice del cliente da cambiare
+
+                    Guid id = _azienda.ListaClienti[tmp].ID; // Salvo il suo ID per trasferirlo
+                    Persona<decimal>.RimuoviID(_azienda.ListaClienti[tmp]);
+
+                    _azienda.ListaClienti.RemoveAt(tmp); // Rimuovo il cliente
+
+                    emp.ID = id; // Gli imposto l'ID del cliente rimosso
+
+                    _azienda.ListaDipendenti.Add(emp); // Aggiungo il dipendente
+
                     lstClienti.Items.Refresh();
                     lstDipendenti.Items.Refresh();
+
                     lstDipendenti.SelectedIndex = lstDipendenti.Items.Count - 1;
                 }
                 else
                 {
                     int tmp = lstDipendenti.SelectedIndex;
-                    _azienda.ListaDipendenti[tmp] = emp;
+                    _azienda.ListaDipendenti[tmp].Nome = nome;
+                    _azienda.ListaDipendenti[tmp].Cognome = cognome;
+                    _azienda.ListaDipendenti[tmp].StipendioAnnuo = stipendio;
                     lstDipendenti.Items.Refresh();
                     lstDipendenti.SelectedIndex = tmp;
                 }
             }
-            else if (tipoPersona == typeof(Customer<decimal>))
+            else if ((bool) rdbCliente.IsChecked)
             {
-                Customer<decimal> c = (Customer<decimal>)_personaCorrente;
-
-                if (c.ListaAcquisti.Count == 0)
+                if (_acquistiCorrenti.Count == 0)
                 {
                     MessageBoxResult risposta = MessageBox.Show(
                         "Sei sicuro di voler modificare un cliente lasciandolo senza acquisti?",
@@ -304,17 +332,34 @@ namespace WpfApp_GestioneAzienda
 
                 if (lstClienti.SelectedIndex == -1) // Presumo di star cambiando un dipendente in cliente
                 {
+                    Customer<decimal> c = new Customer<decimal>(
+                        nome,
+                        cognome,
+                        _acquistiCorrenti
+                    );
+                    Persona<decimal>.RimuoviID(c);
+
                     int tmp = lstDipendenti.SelectedIndex;
+
+                    Guid id = _azienda.ListaDipendenti[tmp].ID;
+                    Persona<decimal>.RimuoviID(_azienda.ListaDipendenti[tmp]);
+
                     _azienda.ListaDipendenti.RemoveAt(tmp);
+                    c.ID = id;
+
                     _azienda.ListaClienti.Add(c);
+
                     lstClienti.Items.Refresh();
                     lstDipendenti.Items.Refresh();
+
                     lstClienti.SelectedIndex = lstClienti.Items.Count - 1;
                 }
                 else
                 {
                     int tmp = lstClienti.SelectedIndex;
-                    _azienda.ListaClienti[tmp] = c;
+                    _azienda.ListaClienti[tmp].Nome = nome;
+                    _azienda.ListaClienti[tmp].Cognome = cognome;
+                    _azienda.ListaClienti[tmp].ListaAcquisti = _acquistiCorrenti;
                     lstClienti.Items.Refresh();
                     lstDipendenti.Items.Refresh();
                     lstClienti.SelectedIndex = tmp;
@@ -355,14 +400,16 @@ namespace WpfApp_GestioneAzienda
                 return;
             }
 
-
-            if (_personaCorrente.GetType() == typeof(Customer<decimal>))
+            
+            if ((bool)rdbCliente.IsChecked)
             {
+                Persona<decimal>.RimuoviID(_azienda.ListaClienti[lstClienti.SelectedIndex]);
                 _azienda.ListaClienti.RemoveAt(lstClienti.SelectedIndex);
                 lstClienti.Items.Refresh();
             }
-            else if (_personaCorrente.GetType() == typeof(Employee<decimal>))
-            {
+            else if ((bool)rdbImpiegato.IsChecked)
+            { 
+                Persona<decimal>.RimuoviID(_azienda.ListaDipendenti[lstDipendenti.SelectedIndex]);
                 _azienda.ListaDipendenti.RemoveAt(lstDipendenti.SelectedIndex);
                 lstDipendenti.Items.Refresh();
             }
@@ -373,6 +420,13 @@ namespace WpfApp_GestioneAzienda
         #endregion
 
         #region List Box
+
+        private bool PersonaInAzienda(Persona<decimal> p)
+        {
+            if (_azienda.ListaClienti.Contains(p) || _azienda.ListaDipendenti.Contains(p))
+                return true;
+            return false;
+        }
 
         private void lstClienti_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -388,11 +442,15 @@ namespace WpfApp_GestioneAzienda
 
             btnModifica.IsEnabled = true;
             btnRimuovi.IsEnabled = true;
-
+            
             Customer<decimal> c = _azienda.ListaClienti[lstClienti.SelectedIndex];
-            _personaCorrente = c;
-
-            CaricaDati(c);
+            CaricaDati(
+                c.GetType(), 
+                c.Nome, 
+                c.Cognome, 
+                acquisti: c.ListaAcquisti
+            );
+            
             ModalitaModifica(false);
             AccessoInput(false);
         }
@@ -411,9 +469,13 @@ namespace WpfApp_GestioneAzienda
             btnRimuovi.IsEnabled = true;
 
             Employee<decimal> emp = _azienda.ListaDipendenti[lstDipendenti.SelectedIndex];
-            _personaCorrente = emp;
-
-            CaricaDati(emp);
+            CaricaDati(
+                emp.GetType(),
+                emp.Nome,
+                emp.Cognome,
+                stipendio: emp.StipendioAnnuo
+            );
+            
             ModalitaModifica(false);
             AccessoInput(false);
         }
@@ -434,35 +496,19 @@ namespace WpfApp_GestioneAzienda
         }
         
         #endregion
-       
+        
         #endregion
-
-        private void OttieniRuolo()
-        {
-            if ((bool)rdbCliente.IsChecked)
-            {
-                Persona<decimal>.RimuoviID(_personaCorrente);
-                _personaCorrente = new Customer<decimal>();
-            }
-            else if ((bool)rdbImpiegato.IsChecked)
-            {
-                Persona<decimal>.RimuoviID(_personaCorrente);
-                _personaCorrente = new Employee<decimal>();
-            }
-            else
-                throw new Exception("Non è stata effettuata la scelta tra cliente e dipendente!");
-        }
 
         private void CaricaInterfacciaPersona()
         {
-            if (_personaCorrente.GetType() == typeof(Customer<decimal>))
+            if ((bool) rdbCliente.IsChecked)
             {
                 grpImpiegati.Visibility = Visibility.Collapsed;
                 grpClienti.Visibility = Visibility.Visible;
 
                 btnAggiungiAllaAzienda.Content = "Aggiungi Cliente";
             }
-            else if (_personaCorrente.GetType() == typeof(Employee<decimal>))
+            else if ((bool) rdbImpiegato.IsChecked)
             {
                 grpImpiegati.Visibility = Visibility.Visible;
                 grpClienti.Visibility = Visibility.Collapsed;
@@ -506,24 +552,26 @@ namespace WpfApp_GestioneAzienda
                 return false;
         }
 
-        private void CaricaDati(Persona<decimal> p)
+        private void CaricaDati(Type tipo, string nome, string cognome, List<Acquisto<decimal>> acquisti = null, decimal stipendio = -1)
         {
             RimuoviPlaceholder(txtNome);
             RimuoviPlaceholder(txtCognome);
-            txtNome.Text = p.Nome;
-            txtCognome.Text = p.Cognome;
+            txtNome.Text = nome;
+            txtCognome.Text = cognome;
 
-            if (p.GetType() == typeof(Customer<decimal>))
+            if (tipo == typeof(Customer<decimal>))
             {
                 rdbCliente.IsChecked = true;
-                lstAcquisti.ItemsSource = ((Customer<decimal>)p).ListaAcquisti;
+                lstAcquisti.ItemsSource = acquisti;
             }
-            else if (p.GetType() == typeof(Employee<decimal>))
+            else if (tipo == typeof(Employee<decimal>))
             {
-                Employee<decimal> emp = (Employee<decimal>)p;
+                if (stipendio < 0)
+                    throw new Exception("Stipendio non valido");
+
                 rdbImpiegato.IsChecked = true;
                 RimuoviPlaceholder(txtStipendio);
-                txtStipendio.Text = emp.StipendioAnnuo + "";
+                txtStipendio.Text = stipendio + "";
             }
         }
 
@@ -550,7 +598,6 @@ namespace WpfApp_GestioneAzienda
             ImpostaPlaceholder(txtStipendio, "Inserisci stipendio annuo");
             ImpostaPlaceholder(txtPrezzoAcquisto, "$$$$");
 
-            OttieniRuolo();
             AccessoInput(true);
         }
 
@@ -613,7 +660,6 @@ namespace WpfApp_GestioneAzienda
         
         private void Salva()
         {
-            Persona<decimal>.RimuoviID(_personaCorrente);
             JsonSerializer js = new JsonSerializer();
             js.Formatting = Formatting.Indented;
             using (StreamWriter sw = new StreamWriter(SAVE_FILE_PATH))
@@ -623,8 +669,10 @@ namespace WpfApp_GestioneAzienda
         }
         private void Carica()
         {
-            JsonSerializer js = new JsonSerializer();
-            js.Formatting = Formatting.Indented;
+            JsonSerializer js = new JsonSerializer
+            {
+                Formatting = Formatting.Indented
+            };
             using (StreamReader sr = File.OpenText(SAVE_FILE_PATH))
             {
                 using (JsonReader jsonReader = new JsonTextReader(sr))
@@ -633,14 +681,6 @@ namespace WpfApp_GestioneAzienda
             }
             if (_azienda == null)
                 _azienda = new Company<decimal>();
-
-            Persona<decimal>.CaricaID(
-                _azienda.ListaClienti.Cast<Persona<decimal>>().ToList()
-                );
-            Persona<decimal>.CaricaID(
-                _azienda.ListaDipendenti.Cast<Persona<decimal>>().ToList()
-                );
-
         }
         #endregion
     }

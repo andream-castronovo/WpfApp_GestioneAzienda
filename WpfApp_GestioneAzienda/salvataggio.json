@@ -2,26 +2,22 @@
   "ListaDipendenti": [],
   "ListaClienti": [
     {
-      "_allIds": [
-        "a45d1c97-6837-4df0-8147-0bd89d3702e5",
-        "ef3fefa8-b0bf-44fe-a82a-4f9d40dd95b1",
-        "ba5e6617-7473-4b92-b824-80b417365a98"
-      ],
       "ListaAcquisti": [],
-      "ID": "a45d1c97-6837-4df0-8147-0bd89d3702e5",
-      "Nome": "Andrea",
-      "Cognome": "Castronovo"
+      "ID": "d82cda97-93ad-46f3-b1ef-0c31edc98b71",
+      "Nome": "And",
+      "Cognome": "Cas"
     },
     {
-      "_allIds": [
-        "a45d1c97-6837-4df0-8147-0bd89d3702e5",
-        "ef3fefa8-b0bf-44fe-a82a-4f9d40dd95b1",
-        "ba5e6617-7473-4b92-b824-80b417365a98"
-      ],
       "ListaAcquisti": [],
-      "ID": "ef3fefa8-b0bf-44fe-a82a-4f9d40dd95b1",
-      "Nome": "Andrea",
-      "Cognome": "Castronovo2"
+      "ID": "83873654-208d-45c7-b373-4513f4f595ff",
+      "Nome": "sefwe",
+      "Cognome": "wewef"
+    },
+    {
+      "ListaAcquisti": [],
+      "ID": "5f50eb58-8047-4c2d-958e-73d35fa473f8",
+      "Nome": "wefeww",
+      "Cognome": "wefwef"
     }
   ],
   "SpeseTotali": 0.0,
