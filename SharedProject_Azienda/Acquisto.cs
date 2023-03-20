@@ -7,12 +7,15 @@ namespace SharedProject_Azienda
     class Acquisto<T> where T : struct
     {
         Prodotti _tipo;
+
         int quantita;
         
         [JsonProperty]
         T _costo;
         
         string _note;
+
+        [JsonProperty]
         string _valuta;
 
         public Acquisto(Prodotti tipo, T costo, string valuta="€" ,string note = null)

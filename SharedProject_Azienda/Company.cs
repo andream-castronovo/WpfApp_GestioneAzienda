@@ -42,26 +42,40 @@ namespace SharedProject_Azienda
         #endregion
 
         #region Dati economici
+
+        /// <summary>
+        /// Somma degli stipendi
+        /// </summary>
         public T SpeseTotali
         {
             get
             {
                 T spese = default;
-                // TODO: Da completare
                 foreach (Employee<T> d in _listaDipendenti)
                 {
                     spese += (dynamic)d.StipendioAnnuo;
                 }
 
-                return spese; // HACK: Cambiare il valore restituito
+                return spese;
             }
         }
 
+        /// <summary>
+        /// Somma degli acquisti dei clienti
+        /// </summary>
         public T EntrateTotali 
         { 
             get 
             {
-                return default(T); // HACK: Cambiare il valore restituito
+                T entrate = default;
+                foreach (Customer<T> c in _listaClienti)
+                {
+                    foreach (Acquisto<T> a in c.ListaAcquisti)
+                    {
+                        entrate += (dynamic) a.Price;
+                    }
+                }
+                return entrate;
             } 
         }
 
@@ -69,7 +83,7 @@ namespace SharedProject_Azienda
         {
             get
             {
-                return default(T); // HACK: Cambiare il valore restituito
+                return (dynamic) EntrateTotali - SpeseTotali;
             }
         }
         #endregion
@@ -98,7 +112,7 @@ namespace SharedProject_Azienda
             }
         }
         #endregion
-        
+
         #endregion
     }
 }

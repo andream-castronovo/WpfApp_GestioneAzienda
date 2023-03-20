@@ -17,7 +17,6 @@ namespace WpfApp_GestioneAzienda
     /// </summary>
     public partial class MainWindow : Window
     {
-        // TODO: Fare parte salvataggio e caricamento con JSON
         // TODO: Fare parte dei dati dell'azienda in XAML
 
         public MainWindow()
@@ -40,8 +39,6 @@ namespace WpfApp_GestioneAzienda
             // più preciso rispetto a double e float; utile per le valute.
             // Per usarlo è necessario aggiungere "m" alla fine del numero in modo
             // da differenziarlo dal double (usato di default per i numeri con la virgola in c#)
-            
-            new Thread(Persona<decimal>.Test).Start();
             
             if (!File.Exists(SAVE_FILE_PATH))
             {
@@ -84,7 +81,7 @@ namespace WpfApp_GestioneAzienda
             Reset();
 
             _acquistiCorrenti = new List<Acquisto<decimal>>();
-
+            lstAcquisti.ItemsSource = _acquistiCorrenti;
             
          }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -351,6 +348,7 @@ namespace WpfApp_GestioneAzienda
 
                     lstClienti.Items.Refresh();
                     lstDipendenti.Items.Refresh();
+                    lstAcquisti.Items.Refresh();
 
                     lstClienti.SelectedIndex = lstClienti.Items.Count - 1;
                 }
@@ -362,8 +360,10 @@ namespace WpfApp_GestioneAzienda
                     _azienda.ListaClienti[tmp].ListaAcquisti = _acquistiCorrenti;
                     lstClienti.Items.Refresh();
                     lstDipendenti.Items.Refresh();
+                    lstAcquisti.Items.Refresh();
                     lstClienti.SelectedIndex = tmp;
                 }
+                _acquistiCorrenti = new List<Acquisto<decimal>>();
 
             }
 
@@ -405,6 +405,7 @@ namespace WpfApp_GestioneAzienda
             {
                 Persona<decimal>.RimuoviID(_azienda.ListaClienti[lstClienti.SelectedIndex]);
                 _azienda.ListaClienti.RemoveAt(lstClienti.SelectedIndex);
+                _acquistiCorrenti = new List<Acquisto<decimal>>();
                 lstClienti.Items.Refresh();
             }
             else if ((bool)rdbImpiegato.IsChecked)
@@ -562,7 +563,9 @@ namespace WpfApp_GestioneAzienda
             if (tipo == typeof(Customer<decimal>))
             {
                 rdbCliente.IsChecked = true;
+                _acquistiCorrenti = acquisti;
                 lstAcquisti.ItemsSource = acquisti;
+                lstAcquisti.Items.Refresh();
             }
             else if (tipo == typeof(Employee<decimal>))
             {
@@ -586,6 +589,7 @@ namespace WpfApp_GestioneAzienda
 
 
             lstAcquisti.ItemsSource = null;
+            _acquistiCorrenti = new List<Acquisto<decimal>>();
 
             btnModifica.IsEnabled = false;
             btnRimuovi.IsEnabled = false;
@@ -683,5 +687,20 @@ namespace WpfApp_GestioneAzienda
                 _azienda = new Company<decimal>();
         }
         #endregion
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (tcNav.SelectedIndex)
+            {
+                case 1:
+                    lblCustomers.Content = $"Clienti totali: {_azienda.ListaClienti.Count}";
+                    lblEmployees.Content = $"Dipendenti totali: {_azienda.ListaDipendenti.Count}";
+                    lblExpenses.Content = $"Spese totali: {_azienda.SpeseTotali}€";
+                    lblRevenue.Content = $"Entrate totali: {_azienda.EntrateTotali}€";
+                    lblProfit.Content = $"Profitto: {_azienda.ProfittoTotale}€";
+                    break;
+            }
+            
+        }
     }
 }

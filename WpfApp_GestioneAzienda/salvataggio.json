@@ -2,25 +2,57 @@
   "ListaDipendenti": [],
   "ListaClienti": [
     {
-      "ListaAcquisti": [],
-      "ID": "d82cda97-93ad-46f3-b1ef-0c31edc98b71",
-      "Nome": "And",
-      "Cognome": "Cas"
+      "ListaAcquisti": [
+        {
+          "_costo": 200.0,
+          "_valuta": "€",
+          "Price": 200.0,
+          "Tipo": 0,
+          "Note": null
+        },
+        {
+          "_costo": 900.0,
+          "_valuta": "€",
+          "Price": 900.0,
+          "Tipo": 0,
+          "Note": null
+        },
+        {
+          "_costo": 266.0,
+          "_valuta": "€",
+          "Price": 266.0,
+          "Tipo": 3,
+          "Note": null
+        }
+      ],
+      "SpesaTotale": 1366.0,
+      "ID": "61a144f2-47d3-4e55-80a7-846a0f91a72d",
+      "Nome": "Andrea Maria",
+      "Cognome": "Castronovo"
     },
     {
       "ListaAcquisti": [],
-      "ID": "83873654-208d-45c7-b373-4513f4f595ff",
-      "Nome": "sefwe",
-      "Cognome": "wewef"
+      "SpesaTotale": 0.0,
+      "ID": "d98905c5-15bc-42a5-b7eb-644aa338503b",
+      "Nome": "asd",
+      "Cognome": "asd"
     },
     {
       "ListaAcquisti": [],
-      "ID": "5f50eb58-8047-4c2d-958e-73d35fa473f8",
-      "Nome": "wefeww",
-      "Cognome": "wefwef"
+      "SpesaTotale": 0.0,
+      "ID": "32e4d6a8-3ce7-4f26-86fb-8cc44e3a71c2",
+      "Nome": "2",
+      "Cognome": "2"
+    },
+    {
+      "ListaAcquisti": [],
+      "SpesaTotale": 0.0,
+      "ID": "bf75d754-44c4-47ff-83fb-4d8b441ed143",
+      "Nome": "dedrre",
+      "Cognome": "rr"
     }
   ],
   "SpeseTotali": 0.0,
-  "EntrateTotali": 0.0,
-  "ProfittoTotale": 0.0
+  "EntrateTotali": 1366.0,
+  "ProfittoTotale": 1366.0
 }

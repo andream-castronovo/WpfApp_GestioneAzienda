@@ -42,6 +42,17 @@ namespace SharedProject_Azienda
             return s;
         }
 
+        public T SpesaTotale
+        {
+            get
+            {
+                T spesa = default;
+                foreach (Acquisto<T> a in ListaAcquisti)
+                    spesa += (dynamic) a.Price;
+                return spesa;
+            }
+        }
+
         public override string ToString()
         {
             return base.ToString() + (_listaAcquisti.Count > 0 ? "\nLista acquisti:" : "") + OttieniAcquisti("\n\t");

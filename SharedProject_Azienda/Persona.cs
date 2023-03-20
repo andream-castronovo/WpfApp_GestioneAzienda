@@ -20,17 +20,6 @@ namespace SharedProject_Azienda
 
         private static List<Guid> _allIds = new List<Guid>();
 
-        public static void Test()
-        {
-            while (true)
-            {
-                foreach (var i in _allIds)
-                    Console.WriteLine(i);
-                Console.WriteLine("---------");
-                Thread.Sleep(1000);
-            }
-        }
-
         public static void CaricaIDs(List<Persona<T>> lst)
         {
             foreach (Persona<T> p in lst)
