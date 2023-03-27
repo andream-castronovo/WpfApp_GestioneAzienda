@@ -99,6 +99,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Diagramma Classi Company.png" />
+  </ItemGroup>
   <Import Project="..\SharedProject_Azienda\SharedProject_Azienda.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
