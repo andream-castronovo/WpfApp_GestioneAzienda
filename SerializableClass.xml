@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CompanyOfDecimal xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ListaDipendenti />
+  <ListaClienti>
+    <CustomerOfDecimal>
+      <ID>0f6e0f1f-58b5-469e-bdec-dfbde03245de</ID>
+      <Nome>a</Nome>
+      <Cognome>b</Cognome>
+      <ListaAcquisti>
+        <AcquistoOfDecimal>
+          <Price>22</Price>
+        </AcquistoOfDecimal>
+        <AcquistoOfDecimal>
+          <Price>22</Price>
+        </AcquistoOfDecimal>
+        <AcquistoOfDecimal>
+          <Price>22</Price>
+        </AcquistoOfDecimal>
+      </ListaAcquisti>
+    </CustomerOfDecimal>
+  </ListaClienti>
+</CompanyOfDecimal>

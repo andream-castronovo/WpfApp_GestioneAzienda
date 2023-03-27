@@ -1,0 +1,30 @@
+{
+  "ListaDipendenti": [],
+  "ListaClienti": [
+    {
+      "ListaAcquisti": [],
+      "SpesaTotale": 0.0,
+      "ID": "7549de02-993b-47d7-9e5b-a53e1ca93732",
+      "Nome": "Andrea",
+      "Cognome": "Castronovo"
+    },
+    {
+      "ListaAcquisti": [
+        {
+          "_costo": 23.0,
+          "_valuta": "€",
+          "Price": 23.0,
+          "Tipo": 0,
+          "Note": null
+        }
+      ],
+      "SpesaTotale": 23.0,
+      "ID": "63e35cc8-ef9e-41b0-ab29-f0fd1dd76948",
+      "Nome": "A",
+      "Cognome": "B"
+    }
+  ],
+  "SpeseTotali": 0.0,
+  "EntrateTotali": 23.0,
+  "ProfittoTotale": 23.0
+}

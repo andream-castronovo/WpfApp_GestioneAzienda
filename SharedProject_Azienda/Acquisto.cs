@@ -1,22 +1,28 @@
 using System;
 using System.Windows.Controls;
+using System.Xml;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace SharedProject_Azienda
 {
-    class Acquisto<T> where T : struct
+    public class Acquisto<T> where T : struct
     {
         Prodotti _tipo;
 
         int quantita;
         
         [JsonProperty]
+        
         T _costo;
         
         string _note;
 
         [JsonProperty]
-        string _valuta;
+        string _valuta = "€";
+
+        public Acquisto()
+        {}
 
         public Acquisto(Prodotti tipo, T costo, string valuta="€" ,string note = null)
         {
@@ -26,10 +32,15 @@ namespace SharedProject_Azienda
             _valuta = valuta;
         }
 
+
         public T Price
         {
             get => _costo;
-            
+            set
+            {
+                if ((dynamic) _costo == default(T))
+                    _costo = value;
+            }
         }
 
         public Prodotti Tipo

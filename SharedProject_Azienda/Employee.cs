@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace SharedProject_Azienda
 {
-    class Employee<T> : Persona<T> where T : struct
+    public class Employee<T> : Persona<T> where T : struct
     {
+
+        
         private string _valuta = "€";
+        
         private T _stipendioAnnuo;
 
         public Employee() : base()
@@ -23,7 +27,6 @@ namespace SharedProject_Azienda
             get => _stipendioAnnuo;
             set
             {
-                // TODO: Fare controlli
                 _stipendioAnnuo = value;
             }
         }

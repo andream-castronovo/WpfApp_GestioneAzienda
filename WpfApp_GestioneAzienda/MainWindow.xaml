@@ -14,16 +14,21 @@
         Closing="Window_Closing"
         >
     <DockPanel>
-        <!--TODO: Fare questa parte-->
         <Menu DockPanel.Dock="Top" Margin="0,0,0,0">
             <MenuItem Header="_File"> <!-- https://wpf-tutorial.com/it/50/controlli-comuni-di-iterfaccia/il-menu-control-di-wpf/ -->
-                <MenuItem Header="_Apri"/> <!--mntApri-->
-                <MenuItem Header="_Salva"/>
-
-
+                <MenuItem Header="Salva come...">
+                    <MenuItem x:Name="mntSalvaJson" Header="Salva come JSON" Click="mntSalvaJson_Click"/>
+                    <MenuItem x:Name="mntSalvaXml" Header="Salva come XML" Click="mntSalvaXml_Click"/>
+                    <MenuItem x:Name="mntSalvaCsv" Header="Salva come CSV" Click="mntSalvaCsv_Click"/>
+                </MenuItem>
+                <MenuItem Header="Apri...">
+                    <MenuItem x:Name="mntApriJson" Header="Apri JSON" Click="mntApriJson_Click"/>
+                    <MenuItem x:Name="mntApriXml" Header="Apri XML" Click="mntApriXml_Click"/>
+                    <MenuItem x:Name="mntApriCsv" Header="Apri CSV" Click="mntApriCsv_Click"/>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="_Impostazioni">
-                <MenuItem Header="Salvataggio automatico" IsCheckable="True"/>
+                <MenuItem x:Name="mntAutosalvataggio" Header="Salvataggio automatico" IsCheckable="True" Click="mntAutosalvataggio_Click"/>
             </MenuItem>
         </Menu>
         <TabControl x:Name="tcNav" SelectionChanged="TabControl_SelectionChanged">
@@ -47,7 +52,7 @@
                         </Grid.RowDefinitions>
 
                         <!--Input Impiegati-->
-                        <GroupBox Name="grpImpiegati" Visibility="Hidden" d:Visibility="Visible" Header="Impiegati" Grid.Row="1">
+                        <GroupBox Name="grpImpiegati" Visibility="Hidden" d:Visibility="Collapsed" Header="Impiegati" Grid.Row="1">
                             <Grid Margin="2">
                                 <!--Stipendio annuo-->
                                 <Grid.RowDefinitions>
@@ -61,7 +66,7 @@
                         </GroupBox>
 
                         <!--Input Clienti-->
-                        <GroupBox Name="grpClienti" Visibility="Hidden" d:Visibility="Hidden" Header="Clienti" Grid.Row="1">
+                        <GroupBox Name="grpClienti" Visibility="Hidden" d:Visibility="Visible" Header="Clienti" Grid.Row="1">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -77,9 +82,10 @@
                                     </Grid.ColumnDefinitions>
 
                                     <!--Selezione acquisto-->
-                                    <Grid Width="150" Height="66">
+                                    <Grid Width="150" Height="88">
 
                                         <Grid.RowDefinitions>
+                                            <RowDefinition Height="22"/>
                                             <RowDefinition Height="22"/>
                                             <RowDefinition Height="22"/>
                                             <RowDefinition Height="22"/>
@@ -93,13 +99,14 @@
                                         <ComboBox Grid.Row="1" Name="cmbListaAcquisti" d:ItemsSource="{d:SampleData}" SelectedIndex="0"/>
                                         <TextBox LostFocus="txtBox_LostFocus"  GotFocus="txtBox_GotFocus" Grid.Row="1" Grid.Column="1" x:Name="txtPrezzoAcquisto"/>
                                         <Button  Grid.ColumnSpan="2" Grid.Row="2" x:Name="btnAggiungiAcquisto" Content="Aggiungi acquisto" Click="btnAggiungiAcquisto_Click"/>
+                                        <Button  Grid.ColumnSpan="2" Grid.Row="3" x:Name="btnRimuoviAcquisto" Content="Rimuovi acquisto" Click="btnRimuoviAcquisto_Click"/>
                                     </Grid>
                                 </Grid>
 
                                 <!--Lista acquisti-->
                                 <Grid>
                                     <GroupBox Header="Lista acquisti">
-                                        <ListBox Name="lstAcquisti" d:ItemsSource="{d:SampleData}" BorderThickness="0"/>
+                                        <ListBox Name="lstAcquisti" d:ItemsSource="{d:SampleData}" BorderThickness="0" SelectionChanged="lstAcquisti_SelectionChanged"/>
                                     </GroupBox>
                                 </Grid>
                             </Grid>
@@ -158,7 +165,7 @@
                         
                         <!--Aggiunta di persona-->
                         <GroupBox Grid.Row="2" Visibility="Visible" Name="grpAggiunta" Header="Modalità aggiunta" >
-                            <Grid>
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center"> 
                                 <StackPanel Orientation="Horizontal">
                                     <!--Aggiunta-->
                                     <Button d:Visibility="Visible" Visibility="Visible" x:Name="btnAggiungiAllaAzienda" Content="Aggiungi Cliente" MinWidth="95" Height="50" MinHeight="20" Click="btnAggiungiAllaAzienda_Click"/>

@@ -2,12 +2,21 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using System.Runtime.Serialization;
+using System.Xml.Linq;
+
 
 namespace SharedProject_Azienda
 {
-    class Company<T> where T : struct
+    public class Company<T> where T : struct
     {
+        
         private List<Employee<T>> _listaDipendenti;
+        
+        
         private List<Customer<T>> _listaClienti;
 
 
@@ -25,7 +34,6 @@ namespace SharedProject_Azienda
             get => _listaDipendenti;
             set
             {
-                // TODO: Fare controlli
                 _listaDipendenti = value;
             }
         }
@@ -35,7 +43,6 @@ namespace SharedProject_Azienda
             get => _listaClienti;
             set
             {
-                // TODO: Fare controlli
                 _listaClienti = value;
             }
         }
@@ -92,8 +99,8 @@ namespace SharedProject_Azienda
         public Employee<T> this[int i] 
         {
             get 
-            { 
-                throw new NotImplementedException(); 
+            {
+                return _listaDipendenti[i]; 
             }
         }
 
@@ -103,12 +110,20 @@ namespace SharedProject_Azienda
         /// <param name="name">Nome del cliente</param>
         /// <param name="cognome">Cognome del cliente</param>
         /// <returns>Lista di clienti con stesso nome e cognome (lista di 1 elemento in caso di nessun doppione)</returns>
-        /// <exception cref="NotImplementedException"></exception>
         public List<Customer<T>> this[string name, string cognome]
         {
             get 
-            { 
-                throw new NotImplementedException();
+            {
+                List<Customer<T>> lst = new List<Customer<T>>();
+                foreach (Customer<T> c in _listaClienti)
+                {
+                    if (c.Nome == name && c.Cognome == cognome)
+                    {
+                        lst.Add(c);
+                    }
+                }
+
+                return lst;
             }
         }
         #endregion

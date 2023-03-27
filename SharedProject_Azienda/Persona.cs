@@ -3,21 +3,25 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Threading;
 using System.Runtime.CompilerServices;
+using System.Xml.Serialization;
 
 namespace SharedProject_Azienda
 {
-    abstract class Persona<T> where T : struct
+    public abstract class Persona<T> where T : struct
     {
         // Non tutto il contenuto è abstract in quanto nelle classi derivate servono,
         // non mettendole abstract mi risparmio di riscrivere tutti i codici comuni.
 
         #region CDC
+        
         string _nome;
+        
         string _cognome;
-
+        
         Guid _id;
         #endregion
 
+    
         private static List<Guid> _allIds = new List<Guid>();
 
         public static void CaricaIDs(List<Persona<T>> lst)

@@ -1,6 +1,6 @@
 ﻿namespace SharedProject_Azienda
 {
-    enum Prodotti : byte
+    public enum Prodotti : byte
     {
         Resistore,
         Condensatore,

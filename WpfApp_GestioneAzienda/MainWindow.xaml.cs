@@ -5,10 +5,14 @@ using System.Windows.Controls;
 using System;
 using System.Windows.Media;
 using System.Linq;
-using System.Runtime.InteropServices;
-using Newtonsoft.Json;
 using System.IO;
-using System.Threading;
+using System.Xml.Serialization;
+
+using Newtonsoft.Json;
+using CsvHelper;
+using System.Runtime.CompilerServices;
+using CsvHelper.Configuration;
+using System.Globalization;
 
 namespace WpfApp_GestioneAzienda
 {
@@ -17,14 +21,16 @@ namespace WpfApp_GestioneAzienda
     /// </summary>
     public partial class MainWindow : Window
     {
-        // TODO: Fare parte dei dati dell'azienda in XAML
-
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        const string SAVE_FILE_PATH = @"..\..\salvataggio.json";
+        const string SAVE_FILE_PATH_JSON = @"..\..\salvataggioJson.json";
+        const string SAVE_FILE_PATH_XML = @"..\..\salvataggioJson.xml";
+        const string SAVE_FILE_PATH_CSV = @"..\..\salvataggioJson.csv";
+
+        bool _autosalvataggio;
 
         Company<decimal> _azienda;
         List<Acquisto<decimal>> _acquistiCorrenti;
@@ -40,9 +46,9 @@ namespace WpfApp_GestioneAzienda
             // Per usarlo è necessario aggiungere "m" alla fine del numero in modo
             // da differenziarlo dal double (usato di default per i numeri con la virgola in c#)
             
-            if (!File.Exists(SAVE_FILE_PATH))
+            if (!File.Exists(SAVE_FILE_PATH_JSON))
             {
-                new StreamWriter(SAVE_FILE_PATH).Close();
+                new StreamWriter(SAVE_FILE_PATH_JSON).Close();
 
                 _azienda = new Company<decimal>();
 
@@ -63,7 +69,7 @@ namespace WpfApp_GestioneAzienda
             }
             else
             {
-                Carica();
+                CaricaJson();
                 _toSave = false;
             }
 
@@ -71,6 +77,9 @@ namespace WpfApp_GestioneAzienda
             foreach (string s in Enum.GetNames(typeof(Prodotti)))
                 cmbListaAcquisti.Items.Add(s);
             
+            // ItemsSource serve per collegare una ListBox ad una collezione, per poi essere aggiornata in automatico;
+            // Per visualizzare gli aggiornamenti lst.Items.Refresh()
+
             lstDipendenti.ItemsSource = _azienda.ListaDipendenti;
             lstClienti.ItemsSource = _azienda.ListaClienti;
 
@@ -84,6 +93,8 @@ namespace WpfApp_GestioneAzienda
             lstAcquisti.ItemsSource = _acquistiCorrenti;
             
          }
+
+
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (_toSave)
@@ -91,12 +102,13 @@ namespace WpfApp_GestioneAzienda
                 MessageBoxResult mgb = MessageBox.Show("Salvare prima di uscire?", "Proposta salvataggio", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
                 if (mgb == MessageBoxResult.Yes)
                 {
-                    Salva();
+                    SalvaJson(); // Salvo 
                 }
                 else if (mgb == MessageBoxResult.Cancel)
                 {
-                    e.Cancel = true;
+                    e.Cancel = true; // Non chiudo
                 }
+                // non serve condizione NO perché il programma si chiude senza salvare
             }
         }
 
@@ -120,7 +132,7 @@ namespace WpfApp_GestioneAzienda
 
             try
             {
-                if (IsPlaceholder(txtNome))
+                if (IsPlaceholder(txtNome)) // per controllo placeholder
                     throw new Exception("Il nome è vuoto");
                 if (IsPlaceholder(txtCognome))
                     throw new Exception("Il cognome è vuoto");
@@ -194,9 +206,19 @@ namespace WpfApp_GestioneAzienda
 
             lstDipendenti.Items.Refresh();
             lstClienti.Items.Refresh();
-            _toSave = true;
+            
             Reset();
+            if (_autosalvataggio)
+                SalvaJson();
+            else
+                _toSave = true;
         }
+
+        /// <summary>
+        ///  Per aggiungere acquisti
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAggiungiAcquisto_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -370,8 +392,11 @@ namespace WpfApp_GestioneAzienda
             
             ModalitaModifica(false);
             AccessoInput(false);
-            _toSave = true;
             
+            if (_autosalvataggio)
+                SalvaJson();
+            else
+                _toSave = true;
         }
         private void btnNuovaPersona_Click(object sender, RoutedEventArgs e)
         {
@@ -414,7 +439,11 @@ namespace WpfApp_GestioneAzienda
                 _azienda.ListaDipendenti.RemoveAt(lstDipendenti.SelectedIndex);
                 lstDipendenti.Items.Refresh();
             }
-            _toSave = true;
+
+            if (_autosalvataggio)
+                SalvaJson();
+            else
+                _toSave = true;
         }
 
 
@@ -500,6 +529,9 @@ namespace WpfApp_GestioneAzienda
         
         #endregion
 
+        /// <summary>
+        /// Carica l'interfaccia per la persona (Vedere CaricaDati per caricare i dati)
+        /// </summary>
         private void CaricaInterfacciaPersona()
         {
             if ((bool) rdbCliente.IsChecked)
@@ -519,11 +551,23 @@ namespace WpfApp_GestioneAzienda
             }
         }
 
+        /// <summary>
+        /// Visualizza a schermo un messaggio con grafica da errore
+        /// </summary>
+        /// <param name="messaggio">Messaggio da visualizzare</param>
         private void MessaggioErrore(string messaggio)
         {
             MessageBox.Show("Si è verificato un errore:\n\t" + messaggio, "Errore", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
+        /// <summary>
+        /// Controlla che la stringa sia valida
+        /// </summary>
+        /// <param name="s">Stringa da controllare</param>
+        /// <param name="seNull">Messaggio errore in caso la stringa sia null</param>
+        /// <param name="seVuota">Messaggio errore in caso la stringa sia vuota</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         private string ControllaStringa(string s, string seNull="La stringa non deve essere null!", string seVuota="Devi scrivere qualcosa!")
         {
             if (s == null)
@@ -533,6 +577,12 @@ namespace WpfApp_GestioneAzienda
             return s;
         }
 
+        /// <summary>
+        /// Converti il nome in numero di enumerazione
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <param name="t"></param>
+        /// <returns></returns>
         private int OttieniNumByNome(string Name, Type t)
         {
             string[] all = Enum.GetNames(t);
@@ -545,6 +595,11 @@ namespace WpfApp_GestioneAzienda
             return -1;
         }
 
+        /// <summary>
+        /// Controlla se una TextBox è un placeholder
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns></returns>
         private bool IsPlaceholder(TextBox txt)
         {
             if ((txt.Tag as string).Split('#')[1] == "active")
@@ -553,6 +608,15 @@ namespace WpfApp_GestioneAzienda
                 return false;
         }
 
+        /// <summary>
+        /// Carica i dati della persona nell'interfaccia
+        /// </summary>
+        /// <param name="tipo">Tipo della persona da caricare</param>
+        /// <param name="nome">Nome della persona da caricare</param>
+        /// <param name="cognome">Cognome della persona da caricare</param>
+        /// <param name="acquisti">ListaAcquisti (null se non presente) della persona da caricare</param>
+        /// <param name="stipendio">Stipendio (-1 se non presente) della persona da caricare</param>
+        /// <exception cref="Exception"></exception>
         private void CaricaDati(Type tipo, string nome, string cognome, List<Acquisto<decimal>> acquisti = null, decimal stipendio = -1)
         {
             RimuoviPlaceholder(txtNome);
@@ -577,7 +641,9 @@ namespace WpfApp_GestioneAzienda
                 txtStipendio.Text = stipendio + "";
             }
         }
-
+        /// <summary>
+        /// Reimposta la finestra alle impostazioni iniziali
+        /// </summary>
         private void Reset()
         {
             txtNome.Text = "";
@@ -596,6 +662,9 @@ namespace WpfApp_GestioneAzienda
 
             btnAggiungiAllaAzienda.Visibility = Visibility.Visible;
             btnNuovaPersona.Visibility = Visibility.Collapsed;
+            
+            btnRimuoviAcquisto.IsEnabled = false;
+
 
             ImpostaPlaceholder(txtNome, "Inserisci nome");
             ImpostaPlaceholder(txtCognome, "Inserisci cognome");
@@ -662,22 +731,22 @@ namespace WpfApp_GestioneAzienda
         
         #region JSON
         
-        private void Salva()
+        private void SalvaJson()
         {
             JsonSerializer js = new JsonSerializer();
             js.Formatting = Formatting.Indented;
-            using (StreamWriter sw = new StreamWriter(SAVE_FILE_PATH))
+            using (StreamWriter sw = new StreamWriter(SAVE_FILE_PATH_JSON))
             {
                 js.Serialize(sw, _azienda);
             }
         }
-        private void Carica()
+        private void CaricaJson()
         {
             JsonSerializer js = new JsonSerializer
             {
                 Formatting = Formatting.Indented
             };
-            using (StreamReader sr = File.OpenText(SAVE_FILE_PATH))
+            using (StreamReader sr = File.OpenText(SAVE_FILE_PATH_JSON))
             {
                 using (JsonReader jsonReader = new JsonTextReader(sr))
                     _azienda = (Company<decimal>)js.Deserialize(jsonReader, typeof(Company<decimal>));
@@ -687,6 +756,48 @@ namespace WpfApp_GestioneAzienda
                 _azienda = new Company<decimal>();
         }
         #endregion
+
+        #region XML
+
+        private void SalvaXML()
+        {
+
+            XmlSerializer xmlSer = new XmlSerializer(typeof(Company<decimal>));
+
+
+            using (StreamWriter myWriter = new StreamWriter(SAVE_FILE_PATH_XML))
+                xmlSer.Serialize(myWriter, _azienda); // Scrive nel nostro file "myWriter" l'oggetto serializzato "myObject"
+            
+        }
+
+        private void CaricaXML()
+        {
+            XmlSerializer mySerializer = new XmlSerializer(typeof(Company<decimal>));
+
+            using (StreamReader myReader = new StreamReader(SAVE_FILE_PATH_XML))
+                _azienda = (Company<decimal>)mySerializer.Deserialize(myReader);
+            
+            
+            
+        }
+
+
+        #endregion
+
+        #region CSV
+
+        private void SalvaCSV()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void CaricaCSV()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -701,6 +812,89 @@ namespace WpfApp_GestioneAzienda
                     break;
             }
             
+        }
+
+        private void mntSalvaJson_Click(object sender, RoutedEventArgs e)
+        {
+            SalvaJson();
+        }
+        private void mntApriJson_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                CaricaJson();
+                RefreshListe();
+            }
+            catch
+            {
+                MessaggioErrore("C'è stato un problema nella lettura del file, sicuro il file esista?");
+            }
+        }
+
+        private void mntSalvaXml_Click(object sender, RoutedEventArgs e)
+        {
+            SalvaXML();
+        }
+        private void mntApriXml_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                CaricaXML();
+            }
+            catch
+            {
+                MessaggioErrore("C'è stato un problema nella lettura del file, sicuro il file esista?");
+                return;
+            }
+
+            lstDipendenti.ItemsSource = _azienda.ListaDipendenti;
+            lstClienti.ItemsSource = _azienda.ListaClienti;
+            _toSave = false;
+
+            RefreshListe();
+        }
+        private void RefreshListe()
+        {
+            lstClienti.Items.Refresh();
+            lstAcquisti.Items.Refresh();
+            lstDipendenti.Items.Refresh();
+        }
+        private void mntApriCsv_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Non ancora implementato.","Errore",MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+        private void mntSalvaCsv_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Non ancora implementato.", "Errore", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+
+        private void btnRimuoviAcquisto_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (lstAcquisti.SelectedIndex == -1)
+                    throw new Exception("Devi prima selezionare un acquisto");
+
+                _acquistiCorrenti.RemoveAt(lstAcquisti.SelectedIndex);
+                lstAcquisti.Items.Refresh();
+            }
+            catch (Exception ex)
+            {
+                MessaggioErrore(ex.Message);
+            }
+        }
+        private void lstAcquisti_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lstAcquisti.SelectedIndex == -1)
+                btnRimuoviAcquisto.IsEnabled = false;
+            else
+                btnRimuoviAcquisto.IsEnabled = true;
+        }
+        private void mntAutosalvataggio_Click(object sender, RoutedEventArgs e)
+        {
+            _autosalvataggio = !_autosalvataggio;
         }
     }
 }

@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace SharedProject_Azienda
 {
-    class Customer<T> : Persona<T> where T : struct
+    public class Customer<T> : Persona<T> where T : struct
     {
         public override T GetEconomicValue()
         {
-            throw new NotImplementedException();
+            return SpesaTotale;
         }
 
+        
         List<Acquisto<T>> _listaAcquisti;
 
         public Customer() : base ()
