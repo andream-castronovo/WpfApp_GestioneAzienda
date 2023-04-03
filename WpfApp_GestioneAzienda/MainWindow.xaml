@@ -164,24 +164,71 @@
 
                         
                         <!--Aggiunta di persona-->
-                        <GroupBox Grid.Row="2" Visibility="Visible" Name="grpAggiunta" Header="Modalità aggiunta" >
-                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center"> 
-                                <StackPanel Orientation="Horizontal">
-                                    <!--Aggiunta-->
-                                    <Button d:Visibility="Visible" Visibility="Visible" x:Name="btnAggiungiAllaAzienda" Content="Aggiungi Cliente" MinWidth="95" Height="50" MinHeight="20" Click="btnAggiungiAllaAzienda_Click"/>
-                                    <Button d:Visibility="Visible" Visibility="Collapsed" d:Margin="10,0,0,0" x:Name="btnNuovaPersona" Content="Aggiungi nuovo" MinWidth="95" Height="50" MinHeight="20" Click="btnNuovaPersona_Click"/>
+                        <TabControl Grid.Row="2" Visibility="Visible" Name="grpAggiunta">
+                            <TabItem Header="Aggiungi persona">
+                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal">
+                                        <!--Aggiunta-->
+                                        <Button d:Visibility="Visible" Visibility="Visible" x:Name="btnAggiungiAllaAzienda" Content="Aggiungi Cliente" MinWidth="95" Height="50" MinHeight="20" Click="btnAggiungiAllaAzienda_Click"/>
+                                        <Button d:Visibility="Visible" Visibility="Collapsed" d:Margin="10,0,0,0" x:Name="btnNuovaPersona" Content="Aggiungi nuovo" MinWidth="95" Height="50" MinHeight="20" Click="btnNuovaPersona_Click"/>
 
-                                    <!--Modifica-->
-                                    <Button d:Visibility="Visible" Margin="10,0,0,0" Visibility="Visible" x:Name="btnModifica" Content="Inizia modifica" MinWidth="95" Height="50" MinHeight="20" Click="btnModifica_Click"/>
-                                    <Button d:Visibility="Visible" Margin="10,0,0,0" Visibility="Collapsed" x:Name="btnConfermaModifica" Content="Conferma modifica" MinWidth="95" Height="50" MinHeight="20" Click="btnConfermaModifica_Click"/>
+                                        <!--Modifica-->
+                                        <Button d:Visibility="Visible" Margin="10,0,0,0" Visibility="Visible" x:Name="btnModifica" Content="Inizia modifica" MinWidth="95" Height="50" MinHeight="20" Click="btnModifica_Click"/>
+                                        <Button d:Visibility="Visible" Margin="10,0,0,0" Visibility="Collapsed" x:Name="btnConfermaModifica" Content="Conferma modifica" MinWidth="95" Height="50" MinHeight="20" Click="btnConfermaModifica_Click"/>
 
 
-                                    <!--Rimuovi-->
-                                    <Button d:Visibility="Visible" Margin="10,0,0,0" Visibility="Visible" x:Name="btnRimuovi" Content="Rimuovi" MinWidth="95" Height="50" MinHeight="20" Click="btnRimuoviPersona_Click"/>
+                                        <!--Rimuovi-->
+                                        <Button d:Visibility="Visible" Margin="10,0,0,0" Visibility="Visible" x:Name="btnRimuovi" Content="Rimuovi" MinWidth="95" Height="50" MinHeight="20" Click="btnRimuoviPersona_Click"/>
 
-                                </StackPanel>
-                            </Grid>
-                        </GroupBox>
+                                    </StackPanel>
+                                </Grid>
+                            </TabItem>
+                            
+                            <TabItem Header="Ordina clienti">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Button Width="150" Grid.Row="0" Grid.Column="0" MinWidth="150" Height="30" MinHeight="20" x:Name="btnOrdinaClientiNome" Content="Ordina per nome (A-Z)" Click="btnOrdinaClientiNome_Click"/>
+                                    <Button Width="150"  Grid.Row="0" Grid.Column="1" MinWidth="150" Height="30" MinHeight="20" x:Name="btnOrdinaClientiCognome" Content="Ordina per cognome (A-Z)" Click="btnOrdinaClientiCognome_Click"/>
+
+                                    <Button Width="150" Grid.Row="1" Grid.Column="0" MinWidth="150" Height="30" MinHeight="20" x:Name="btnOrdinaClientiSpesaCrescente" Content="Ordina per spesa (0->9)" Click="btnOrdinaClientiSpesaCrescente_Click"/>
+                                    <Button Width="150" Grid.Row="1" Grid.Column="1" MinWidth="150" Height="30" MinHeight="20"  x:Name="btnOrdinaClientiSpesaDecrescente" Content="Ordina per spesa (9->0)" Click="btnOrdinaClientiSpesaDecrescente_Click"/>
+                                </Grid>
+                                
+                                <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Button x:Name="btnOrdinaClientiSpesa" Content="Ordina per spesa" MinWidth="95" Height="50" MinHeight="20"/>
+                                    <Button x:Name="btnOrdinaClientiNome" Content="Ordina per nome" Margin="10,0,0,0"/>
+                                    <Button x:Name="btnOrdinaClientiCognome" Content="Ordina per cognome" Margin="10,0,0,0"/>
+                                </StackPanel>-->
+                            </TabItem>
+
+                            <TabItem Header="Ordina dipendenti">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Button Width="150" Grid.Row="0" Grid.Column="0" x:Name="btnOrdinaDipendentiNome" MinWidth="150" Height="30" MinHeight="20" Content="Ordina per nome (A-Z)" Click="btnOrdinaDipendentiNome_Click"/>
+                                    <Button Width="150" Grid.Row="0" Grid.Column="1" x:Name="btnOrdinaDipendentiCognome" MinWidth="150" Height="30" MinHeight="20" Content="Ordina per cognome (A-Z)" Click="btnOrdinaDipendentiCognome_Click"/>
+
+                                    <Button Width="150"  Grid.Row="1" Grid.Column="0" x:Name="btnOrdinaDipendentiStipendioCrescente" Content="Ordina per stipendio (0->9)" MinWidth="150" Height="30" MinHeight="20" Click="btnOrdinaDipendentiStipendioCrescente_Click"/>
+                                    <Button Width="150" Grid.Row="1" Grid.Column="1" x:Name="btnOrdinaDipendentiStipendioDecrescente" Content="Ordina per stipendio (9->0)" MinWidth="150" Height="30" MinHeight="20" Click="btnOrdinaDipendentiStipendioDecrescente_Click"/>
+                                </Grid>
+                            </TabItem>
+                            
+                        </TabControl>
 
                     </Grid>
 

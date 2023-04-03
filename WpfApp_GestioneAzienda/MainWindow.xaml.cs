@@ -1,4 +1,6 @@
 ﻿using SharedProject_Azienda;
+using SharedProject_Azienda.SortHelper;
+
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,10 +11,6 @@ using System.IO;
 using System.Xml.Serialization;
 
 using Newtonsoft.Json;
-using CsvHelper;
-using System.Runtime.CompilerServices;
-using CsvHelper.Configuration;
-using System.Globalization;
 
 namespace WpfApp_GestioneAzienda
 {
@@ -896,5 +894,53 @@ namespace WpfApp_GestioneAzienda
         {
             _autosalvataggio = !_autosalvataggio;
         }
+
+
+        #region Ordina clienti
+        private void btnOrdinaClientiNome_Click(object sender, RoutedEventArgs e)
+        {
+            _azienda.ListaClienti.Sort(new SortByName<decimal>());
+            lstClienti.Items.Refresh();
+        }
+
+        private void btnOrdinaClientiSpesaCrescente_Click(object sender, RoutedEventArgs e)
+        {
+            _azienda.ListaClienti.Sort(new SortByBill<decimal>());
+            lstClienti.Items.Refresh();
+        }
+
+        private void btnOrdinaClientiSpesaDecrescente_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: Fare classe helper decrescente
+            // TODO: Problema: SpesaTotale quando non ci sono acquisti è ti tipo intero (?)
+            _azienda.ListaClienti.Sort(new SortByBill<decimal>());
+            lstClienti.Items.Refresh();
+        }
+
+        private void btnOrdinaClientiCognome_Click(object sender, RoutedEventArgs e)
+        {
+            _azienda.ListaClienti.Sort(new SortBySurname<decimal>());
+        }
+        #endregion
+
+        #region Ordina Dipendenti
+        private void btnOrdinaDipendentiNome_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnOrdinaDipendentiCognome_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void btnOrdinaDipendentiStipendioCrescente_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void btnOrdinaDipendentiStipendioDecrescente_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        #endregion
     }
 }

@@ -13,6 +13,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Company.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Customer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Employee.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SortHelper\SortByBill.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SortHelper\SortByCrescentSalary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SortHelper\SortByDecrescentSalary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SortHelper\SortByName.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SortHelper\SortBySurname.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Persona.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Prodotti.cs" />
   </ItemGroup>

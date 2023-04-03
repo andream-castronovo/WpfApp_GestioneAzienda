@@ -11,7 +11,9 @@ using System.Xml.Linq;
 
 namespace SharedProject_Azienda
 {
-    public class Company<T> where T : struct
+    #pragma warning disable CS0660 // Disabilito perché mi consiglia di eseguire override di metodi di object
+    #pragma warning disable CS0661 // Disabilito perché mi consiglia di eseguire override di metodi di object
+    public class Company<T> : IComparable<Company<T>> where T : struct
     {
         
         private List<Employee<T>> _listaDipendenti;
@@ -126,6 +128,55 @@ namespace SharedProject_Azienda
                 return lst;
             }
         }
+
+        #endregion
+
+        #endregion
+
+        /// <summary>
+        /// Compara un'azienda ad un'altra in base al profitto.
+        /// </summary>
+        /// <param name="other">Azienda da comparare con la nostra.</param>
+        /// <returns>Un numero negativo se l'oggetto corrente è minore dell'altro; 0 se i due oggetti sono uguali e un numero positivo se l'oggetto corrente è maggiore</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public int CompareTo(Company<T> other)
+        {
+            if (other == null) 
+                return 1;
+
+            return (dynamic)ProfittoTotale - other.ProfittoTotale;
+        }
+
+        #region Operatori
+
+        #region Uguale e diverso
+        public static bool operator ==(Company<T> A, Company<T> B)
+        {
+            if (A is null || B is null)
+                return false;
+
+            if (A.CompareTo(B) == 0)
+                return true;
+            return false;
+        }
+
+        public static bool operator !=(Company<T> A, Company<T> B) => !(A == B);
+        #endregion
+
+        #region Maggiore, minore e famiglia
+        public static bool operator >(Company<T> A, Company<T> B)
+        {
+            if (A is null || B is null)
+                return false;
+
+            if (A.CompareTo(B) > 0)
+                return true;
+            return false;
+        }
+
+        public static bool operator <(Company<T> A, Company<T> B) => !(A == B) && !(A > B);
+        public static bool operator >=(Company<T> A, Company<T> B) => (A > B) || (A == B);
+        public static bool operator <=(Company<T> A, Company<T> B) => (A < B) || (A == B);
         #endregion
 
         #endregion
