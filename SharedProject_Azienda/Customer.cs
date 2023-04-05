@@ -1,18 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
 namespace SharedProject_Azienda
 {
-    public class Customer<T> : Persona<T> where T : struct
+    public class Customer<T> : Persona<T>, IComparable<Customer<T>> where T : struct
     {
-        public override T GetEconomicValue()
-        {
-            return SpesaTotale;
-        }
+        public override T GetEconomicValue() => SpesaTotale;
 
-        
         List<Acquisto<T>> _listaAcquisti;
 
         public Customer() : base ()
@@ -59,5 +56,7 @@ namespace SharedProject_Azienda
         {
             return base.ToString() + (_listaAcquisti.Count > 0 ? "\nLista acquisti:" : "") + OttieniAcquisti("\n\t");
         }
+
+        public int CompareTo(Customer<T> other) => (int)((dynamic)SpesaTotale - other.SpesaTotale);
     }
 }

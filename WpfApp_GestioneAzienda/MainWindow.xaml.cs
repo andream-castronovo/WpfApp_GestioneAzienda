@@ -905,42 +905,55 @@ namespace WpfApp_GestioneAzienda
 
         private void btnOrdinaClientiSpesaCrescente_Click(object sender, RoutedEventArgs e)
         {
-            _azienda.ListaClienti.Sort(new SortByBill<decimal>());
+            _azienda.ListaClienti.Sort();
             lstClienti.Items.Refresh();
         }
 
         private void btnOrdinaClientiSpesaDecrescente_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Fare classe helper decrescente
-            // TODO: Problema: SpesaTotale quando non ci sono acquisti è ti tipo intero (?)
-            _azienda.ListaClienti.Sort(new SortByBill<decimal>());
+            _azienda.ListaClienti.Sort(new SortByBillDecrescent<decimal>());
             lstClienti.Items.Refresh();
         }
 
         private void btnOrdinaClientiCognome_Click(object sender, RoutedEventArgs e)
         {
             _azienda.ListaClienti.Sort(new SortBySurname<decimal>());
+            lstClienti.Items.Refresh();
         }
         #endregion
 
         #region Ordina Dipendenti
         private void btnOrdinaDipendentiNome_Click(object sender, RoutedEventArgs e)
         {
-
+            _azienda.ListaDipendenti.Sort(new SortByName<decimal>());
+            lstDipendenti.Items.Refresh();
         }
 
         private void btnOrdinaDipendentiCognome_Click(object sender, RoutedEventArgs e)
         {
-
+            _azienda.ListaDipendenti.Sort(new SortBySurname<decimal>());
+            lstDipendenti.Items.Refresh();
         }
         private void btnOrdinaDipendentiStipendioCrescente_Click(object sender, RoutedEventArgs e)
         {
-
+            _azienda.ListaDipendenti.Sort(new SortByCrescentSalary<decimal>());
+            lstDipendenti.Items.Refresh();
         }
         private void btnOrdinaDipendentiStipendioDecrescente_Click(object sender, RoutedEventArgs e)
         {
-
+            _azienda.ListaDipendenti.Sort(new SortByDecrescentSalary<decimal>());
+            lstDipendenti.Items.Refresh();
         }
         #endregion
+        
+        private void btnStampaTuttiMembri_Click(object sender, RoutedEventArgs e)
+        {
+            string mex = "";
+            foreach (Persona<decimal> p in _azienda)
+            {
+                mex += p;
+            }
+            MessageBox.Show(mex);
+        }
     }
 }

@@ -7,13 +7,17 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
 using System.Xml.Linq;
+using System.Collections;
+using Newtonsoft.Json;
 
+#pragma warning disable CS0660 // Warning disabilito perché mi consiglia di eseguire override di metodi di object (Per override degli operatori)
+#pragma warning disable CS0661 // Warning disabilito perché mi consiglia di eseguire override di metodi di object (Per override degli operatori)
 
 namespace SharedProject_Azienda
 {
-    #pragma warning disable CS0660 // Disabilito perché mi consiglia di eseguire override di metodi di object
-    #pragma warning disable CS0661 // Disabilito perché mi consiglia di eseguire override di metodi di object
-    public class Company<T> : IComparable<Company<T>> where T : struct
+    [JsonObject] // Decorator che serve a dire al serializzatore di NON trattare l'oggetto come una lista, vista la presenza di IEnumerable.
+                 // Fonte: https://github.com/JamesNK/Newtonsoft.Json/issues/2121
+    public class Company<T> : IComparable<Company<T>>, IEnumerable<Persona<T>> where T : struct
     {
         
         private List<Employee<T>> _listaDipendenti;
@@ -147,6 +151,19 @@ namespace SharedProject_Azienda
             return (dynamic)ProfittoTotale - other.ProfittoTotale;
         }
 
+        public IEnumerator<Persona<T>> GetEnumerator()
+        {
+            for (int i = 0; i < _listaClienti.Count; i++)
+                yield return _listaClienti[i];
+
+            for (int i = 0; i < _listaDipendenti.Count; i++)
+                yield return _listaDipendenti[i];
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+
+
         #region Operatori
 
         #region Uguale e diverso
@@ -162,6 +179,8 @@ namespace SharedProject_Azienda
 
         public static bool operator !=(Company<T> A, Company<T> B) => !(A == B);
         #endregion
+
+        
 
         #region Maggiore, minore e famiglia
         public static bool operator >(Company<T> A, Company<T> B)

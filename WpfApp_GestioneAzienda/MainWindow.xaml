@@ -262,6 +262,15 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
+            
+            <!--Test IEnumerable-->
+            <TabItem Header="Test IEnumerable">
+                <Grid>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Stampa tutti i membri dell'azienda" Height="30" x:Name="btnStampaTuttiMembri" Click="btnStampaTuttiMembri_Click"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
         </TabControl>
     </DockPanel>
 </Window>

@@ -4,11 +4,11 @@ using System.Text;
 
 namespace SharedProject_Azienda.SortHelper
 {
-    class SortByBill<T> : IComparer<Customer<T>> where T : struct
+    class SortByBillDecrescent<T> : IComparer<Customer<T>> where T : struct
     {
         public int Compare(Customer<T> x, Customer<T> y)
         {
-            return (dynamic)x.SpesaTotale - y.SpesaTotale;
+            return (int)((dynamic) y.SpesaTotale - x.SpesaTotale);
         }
     }
 }

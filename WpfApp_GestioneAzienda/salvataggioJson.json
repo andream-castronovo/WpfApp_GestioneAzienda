@@ -1,30 +1,51 @@
 {
-  "ListaDipendenti": [],
-  "ListaClienti": [
+  "ListaDipendenti": [
     {
-      "ListaAcquisti": [],
-      "SpesaTotale": 0.0,
-      "ID": "7549de02-993b-47d7-9e5b-a53e1ca93732",
-      "Nome": "Andrea",
-      "Cognome": "Castronovo"
+      "StipendioAnnuo": 1200.00,
+      "ID": "dd05ca1c-4355-46db-b553-62fb47a3be3b",
+      "Nome": "Giorgio",
+      "Cognome": "Rossi"
     },
+    {
+      "StipendioAnnuo": 3000.90,
+      "ID": "a890db22-48ee-4562-bc9d-4946c21521f2",
+      "Nome": "Annamaria",
+      "Cognome": "Grondaia"
+    }
+  ],
+  "ListaClienti": [
     {
       "ListaAcquisti": [
         {
-          "_costo": 23.0,
+          "_costo": 3200.0,
           "_valuta": "€",
-          "Price": 23.0,
+          "Price": 3200.0,
           "Tipo": 0,
           "Note": null
         }
       ],
-      "SpesaTotale": 23.0,
-      "ID": "63e35cc8-ef9e-41b0-ab29-f0fd1dd76948",
-      "Nome": "A",
-      "Cognome": "B"
+      "SpesaTotale": 3200.0,
+      "ID": "3993a5c3-5665-431c-976e-24842dd9d3cf",
+      "Nome": "Alberto",
+      "Cognome": "Giacomini"
+    },
+    {
+      "ListaAcquisti": [
+        {
+          "_costo": 2400.0,
+          "_valuta": "€",
+          "Price": 2400.0,
+          "Tipo": 0,
+          "Note": null
+        }
+      ],
+      "SpesaTotale": 2400.0,
+      "ID": "0b4b5a62-8ba1-404e-aab2-5e7317ae53f9",
+      "Nome": "Giovanni",
+      "Cognome": "Giorgio"
     }
   ],
-  "SpeseTotali": 0.0,
-  "EntrateTotali": 23.0,
-  "ProfittoTotale": 23.0
+  "SpeseTotali": 4200.90,
+  "EntrateTotali": 5600.0,
+  "ProfittoTotale": 1399.10
 }
