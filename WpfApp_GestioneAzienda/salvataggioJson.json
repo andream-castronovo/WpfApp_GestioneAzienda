@@ -32,6 +32,28 @@
     {
       "ListaAcquisti": [
         {
+          "_costo": 2.0,
+          "_valuta": "€",
+          "Price": 2.0,
+          "Tipo": 0,
+          "Note": null
+        },
+        {
+          "_costo": 4.0,
+          "_valuta": "€",
+          "Price": 4.0,
+          "Tipo": 0,
+          "Note": null
+        }
+      ],
+      "SpesaTotale": 6.0,
+      "ID": "a86420e6-3a49-423d-bc6a-6c4778bcd22c",
+      "Nome": "And",
+      "Cognome": "Cas"
+    },
+    {
+      "ListaAcquisti": [
+        {
           "_costo": 2400.0,
           "_valuta": "€",
           "Price": 2400.0,
@@ -43,9 +65,24 @@
       "ID": "0b4b5a62-8ba1-404e-aab2-5e7317ae53f9",
       "Nome": "Giovanni",
       "Cognome": "Giorgio"
+    },
+    {
+      "ListaAcquisti": [
+        {
+          "_costo": 2.0,
+          "_valuta": "€",
+          "Price": 2.0,
+          "Tipo": 0,
+          "Note": null
+        }
+      ],
+      "SpesaTotale": 2.0,
+      "ID": "907e9bbe-476f-493e-ad63-e6e1107bc112",
+      "Nome": "Sab",
+      "Cognome": "Tre"
     }
   ],
   "SpeseTotali": 4200.90,
-  "EntrateTotali": 5600.0,
-  "ProfittoTotale": 1399.10
+  "EntrateTotali": 5608.0,
+  "ProfittoTotale": 1407.10
 }

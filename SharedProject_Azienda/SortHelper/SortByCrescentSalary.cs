@@ -8,7 +8,7 @@ namespace SharedProject_Azienda.SortHelper
     {
         public int Compare(Employee<T> x, Employee<T> y)
         {
-            return (dynamic)x.StipendioAnnuo - y.StipendioAnnuo;
+            return (int)((dynamic)x.StipendioAnnuo - y.StipendioAnnuo);
         }
     }
 }

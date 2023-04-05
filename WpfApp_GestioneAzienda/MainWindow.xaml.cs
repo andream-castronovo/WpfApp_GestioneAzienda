@@ -33,6 +33,7 @@ namespace WpfApp_GestioneAzienda
         Company<decimal> _azienda;
         List<Acquisto<decimal>> _acquistiCorrenti;
         bool _toSave;
+        
         #region Eventi
 
         #region Window
@@ -759,7 +760,18 @@ namespace WpfApp_GestioneAzienda
 
         private void SalvaXML()
         {
+            //TODO: Salvataggio XML Non funziona: 
 
+            /*
+                Eccezione non gestita di tipo 'System.InvalidOperationException' in System.Xml.dll
+                Per essere XML serializzabili, i tipi che ereditano da IEnumerable devono avere un'implementazione di Add(System.Object) a 
+                tutti i livelli della gerarchia di ereditarietà. 
+
+                SharedProject_Azienda.Company`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]] 
+            
+                non implementa Add(System.Object).
+            
+            */
             XmlSerializer xmlSer = new XmlSerializer(typeof(Company<decimal>));
 
 

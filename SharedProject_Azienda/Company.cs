@@ -162,8 +162,6 @@ namespace SharedProject_Azienda
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-
-
         #region Operatori
 
         #region Uguale e diverso
