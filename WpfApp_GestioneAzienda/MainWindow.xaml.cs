@@ -948,12 +948,11 @@ namespace WpfApp_GestioneAzienda
         
         private void btnStampaTuttiMembri_Click(object sender, RoutedEventArgs e)
         {
-            string mex = "";
+            lstProvaIEnumerable.Items.Clear();
             foreach (Persona<decimal> p in _azienda)
             {
-                mex += p;
+                lstProvaIEnumerable.Items.Add(p);
             }
-            MessageBox.Show(mex);
         }
     }
 }

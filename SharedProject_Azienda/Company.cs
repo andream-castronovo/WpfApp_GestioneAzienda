@@ -22,7 +22,6 @@ namespace SharedProject_Azienda
         
         private List<Employee<T>> _listaDipendenti;
         
-        
         private List<Customer<T>> _listaClienti;
 
 
@@ -167,14 +166,19 @@ namespace SharedProject_Azienda
         #region Operatori
 
         #region Uguale e diverso
+        /// <summary>
+        /// Restituisce true se le due aziende hanno lo stesso profitto; anche se sono entrambe null.
+        /// </summary>
+        /// <param name="A">Azienda 1</param>
+        /// <param name="B">Azienda 2</param>
+        /// <returns>true se le due aziende hanno lo stesso profitto; anche se sono entrambe null. false se le due aziende sono diverse</returns>
         public static bool operator ==(Company<T> A, Company<T> B)
         {
-            if (A is null || B is null)
-                return false;
+            if (A is null && B is null) return true;
 
-            if (A.CompareTo(B) == 0)
-                return true;
-            return false;
+            if (A is null || B is null) return false;
+
+            return A.CompareTo(B) == 0;
         }
 
         public static bool operator !=(Company<T> A, Company<T> B) => !(A == B);

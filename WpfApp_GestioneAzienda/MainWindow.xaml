@@ -13,6 +13,22 @@
         MinHeight="450"
         Closing="Window_Closing"
         >
+    <Window.Resources>
+        <Style TargetType="ListBoxItem">
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Padding" Value="0,0,0,3"/>
+
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="True">
+                    <Setter Property="BorderBrush" Value="Black"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="BorderBrush" Value="Gray"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    
     <DockPanel>
         <Menu DockPanel.Dock="Top" Margin="0,0,0,0">
             <MenuItem Header="_File"> <!-- https://wpf-tutorial.com/it/50/controlli-comuni-di-iterfaccia/il-menu-control-di-wpf/ -->
@@ -268,6 +284,7 @@
                 <Grid>
                     <StackPanel Orientation="Horizontal">
                         <Button Content="Stampa tutti i membri dell'azienda" Height="30" x:Name="btnStampaTuttiMembri" Click="btnStampaTuttiMembri_Click"/>
+                        <ListBox Margin="10,0,0,0" x:Name="lstProvaIEnumerable" Width="300" MinHeight="350" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
