@@ -8,10 +8,9 @@ namespace SharedProject_Azienda
 {
     public class Acquisto<T> where T : struct
     {
+        // Programmato da Andrea Maria Castronovo - 4°I - Data: 17/04/2023
         Prodotti _tipo;
 
-        int quantita;
-        
         [JsonProperty]
         
         T _costo;

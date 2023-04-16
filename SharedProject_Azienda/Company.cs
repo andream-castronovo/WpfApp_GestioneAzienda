@@ -19,6 +19,7 @@ namespace SharedProject_Azienda
                  // Fonte: https://github.com/JamesNK/Newtonsoft.Json/issues/2121
     public class Company<T> : IComparable<Company<T>>, IEnumerable<Persona<T>> where T : struct
     {
+        // Programmato da Andrea Maria Castronovo - 4°I - Data: 17/04/2023
         
         private List<Employee<T>> _listaDipendenti;
         

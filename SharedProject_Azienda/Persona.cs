@@ -9,11 +9,15 @@ namespace SharedProject_Azienda
 {
     public abstract class Persona<T> where T : struct
     {
+        // Programmato da Andrea Maria Castronovo - 4°I - Data: 17/04/2023
+
+
+
         // Non tutto il contenuto è abstract in quanto nelle classi derivate servono,
         // non mettendole abstract mi risparmio di riscrivere tutti i codici comuni.
 
         #region CDC
-        
+
         string _nome;
         
         string _cognome;

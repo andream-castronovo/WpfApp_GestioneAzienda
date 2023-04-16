@@ -5,14 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp_GestioneAzienda"
         mc:Ignorable="d"
-        Title="MainWindow" 
+        Title="Gestione azienda - Programmato da Andrea Maria Castronovo - 4°I - Data: 17/04/2023" 
         Height="450" 
         Width="800"
         Loaded="Window_Loaded"
         MinWidth="643"
         MinHeight="450"
         Closing="Window_Closing"
+        Icon="pack://application:,,,/Icone/company.ico"
         >
+    <!--Programmato da Andrea Maria Castronovo - 4°I - Data: 17/04/2023-->
+    
     <Window.Resources>
         <Style TargetType="ListBoxItem">
             <Setter Property="BorderThickness" Value="0,0,0,1"/>
@@ -33,11 +36,17 @@
         <Menu DockPanel.Dock="Top" Margin="0,0,0,0">
             <MenuItem Header="_File"> <!-- https://wpf-tutorial.com/it/50/controlli-comuni-di-iterfaccia/il-menu-control-di-wpf/ -->
                 <MenuItem Header="Salva come...">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icone/save.ico"/>
+                    </MenuItem.Icon>
                     <MenuItem x:Name="mntSalvaJson" Header="Salva come JSON" Click="mntSalvaJson_Click"/>
                     <MenuItem x:Name="mntSalvaXml" Header="Salva come XML" Click="mntSalvaXml_Click"/>
                     <MenuItem x:Name="mntSalvaCsv" Header="Salva come CSV" Click="mntSalvaCsv_Click"/>
                 </MenuItem>
                 <MenuItem Header="Apri...">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icone/load.ico"/>
+                    </MenuItem.Icon>
                     <MenuItem x:Name="mntApriJson" Header="Apri JSON" Click="mntApriJson_Click"/>
                     <MenuItem x:Name="mntApriXml" Header="Apri XML" Click="mntApriXml_Click"/>
                     <MenuItem x:Name="mntApriCsv" Header="Apri CSV" Click="mntApriCsv_Click"/>
@@ -269,12 +278,35 @@
             <!--Dati azienda-->
             <TabItem Header="Dati azienda">
                 <Grid>
-                    <StackPanel>
-                        <Label x:Name="lblCustomers" Content="Clienti totali: "/>
-                        <Label x:Name="lblEmployees"  Content="Dipendenti totali: "/>
-                        <Label x:Name="lblExpenses" Content="Spese totali: "/>
-                        <Label x:Name="lblRevenue"  Content="Entrate totali: "/>
-                        <Label x:Name="lblProfit" Content="Profitto: "/>
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Label Content="Statistiche azienda" FontSize="20"/>
+
+                        <DockPanel>
+                            <Image Source="pack://application:,,,/Icone/people.png" Width="20"/>
+                            <Label x:Name="lblCustomers" Content="Clienti totali: "/>
+                        </DockPanel>
+                        
+                        <DockPanel>
+                            <Image Source="pack://application:,,,/Icone/badge.png" Width="20"/>
+                            <Label x:Name="lblEmployees"  Content="Dipendenti totali: "/>
+                        </DockPanel>
+                        
+                        <DockPanel>
+                            <Image Source="pack://application:,,,/Icone/outcome.png" Width="20"/>
+                            <Label x:Name="lblExpenses" Content="Spese totali: "/>
+                        </DockPanel>
+                        
+                        
+                        <DockPanel>
+                            <Image Source="pack://application:,,,/Icone/income.png" Width="20"/>
+                            <Label x:Name="lblRevenue"  Content="Entrate totali: "/>
+                        </DockPanel>
+
+                        <DockPanel>
+                            <Image Source="pack://application:,,,/Icone/profit.png" Width="20"/>
+                            <Label x:Name="lblProfit" Content="Profitto: "/>
+                        </DockPanel>
+                        
                     </StackPanel>
                 </Grid>
             </TabItem>

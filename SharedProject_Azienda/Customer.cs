@@ -11,6 +11,7 @@ namespace SharedProject_Azienda
     #pragma warning disable CS0661 // Warning disabilito perché mi consiglia di eseguire override di metodi di object (Per override degli operatori)
     public class Customer<T> : Persona<T>, IComparable<Customer<T>> where T : struct
     {
+        // Programmato da Andrea Maria Castronovo - 4°I - Data: 17/04/2023
         public override T GetEconomicValue() => SpesaTotale;
 
         List<Acquisto<T>> _listaAcquisti;

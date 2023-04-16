@@ -7,8 +7,9 @@ namespace SharedProject_Azienda
 {
     public class Employee<T> : Persona<T> where T : struct
     {
+        // Programmato da Andrea Maria Castronovo - 4°I - Data: 17/04/2023
 
-        
+
         private string _valuta = "€";
         
         private T _stipendioAnnuo;

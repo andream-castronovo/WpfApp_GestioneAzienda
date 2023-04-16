@@ -14,6 +14,9 @@ using Newtonsoft.Json;
 
 namespace WpfApp_GestioneAzienda
 {
+    // Programmato da Andrea Maria Castronovo - 4°I - Data: 17/04/2023
+
+
     /// <summary>
     /// Logica di interazione per MainWindow.xaml
     /// </summary>
