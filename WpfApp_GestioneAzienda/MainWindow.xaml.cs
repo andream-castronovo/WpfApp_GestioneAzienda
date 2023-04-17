@@ -775,9 +775,9 @@ namespace WpfApp_GestioneAzienda
                 non implementa Add(System.Object).
             
             */
-            XmlSerializer xmlSer = new XmlSerializer(typeof(Company<decimal>));
+            XmlSerializer xmlSer = new XmlSerializer(_azienda.GetType());
 
-
+                
             using (StreamWriter myWriter = new StreamWriter(SAVE_FILE_PATH_XML))
                 xmlSer.Serialize(myWriter, _azienda); // Scrive nel nostro file "myWriter" l'oggetto serializzato "myObject"
             

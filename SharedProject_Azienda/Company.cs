@@ -9,6 +9,7 @@ using System.Runtime.Serialization;
 using System.Xml.Linq;
 using System.Collections;
 using Newtonsoft.Json;
+using System.ComponentModel;
 
 #pragma warning disable CS0660 // Warning disabilito perché mi consiglia di eseguire override di metodi di object (Per override degli operatori)
 #pragma warning disable CS0661 // Warning disabilito perché mi consiglia di eseguire override di metodi di object (Per override degli operatori)
@@ -17,6 +18,7 @@ namespace SharedProject_Azienda
 {
     [JsonObject] // Decorator che serve a dire al serializzatore di NON trattare l'oggetto come una lista, vista la presenza di IEnumerable.
                  // Fonte: https://github.com/JamesNK/Newtonsoft.Json/issues/2121
+    [XmlRoot]
     public class Company<T> : IComparable<Company<T>>, IEnumerable<Persona<T>> where T : struct
     {
         // Programmato da Andrea Maria Castronovo - 4°I - Data: 17/04/2023
@@ -151,6 +153,8 @@ namespace SharedProject_Azienda
             return (dynamic)ProfittoTotale - other.ProfittoTotale;
         }
 
+
+        
         public IEnumerator<Persona<T>> GetEnumerator()
         {
             for (int i = 0; i < _listaClienti.Count; i++)
@@ -202,5 +206,7 @@ namespace SharedProject_Azienda
         #endregion
 
         #endregion
+
+
     }
 }
