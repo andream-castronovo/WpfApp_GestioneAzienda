@@ -7,12 +7,12 @@
         mc:Ignorable="d"
         Title="Gestione azienda - Programmato da Andrea Maria Castronovo - 4°I - Data: 17/04/2023" 
         Height="450" 
-        Width="800"
+        Width="900"
         Loaded="Window_Loaded"
         MinWidth="643"
         MinHeight="450"
         Closing="Window_Closing"
-        Icon="pack://application:,,,/Icone/company.ico"
+        Icon="pack://application:,,,/Icone/company.png"
         >
     <!--Programmato da Andrea Maria Castronovo - 4°I - Data: 17/04/2023-->
     
@@ -278,46 +278,62 @@
             <!--Dati azienda-->
             <TabItem Header="Dati azienda">
                 <Grid>
-                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <Label Content="Statistiche azienda" FontSize="20"/>
+                    <Viewbox MaxHeight="500" MaxWidth="500">
+                        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <Label Content="Statistiche azienda" FontSize="20"/>
 
-                        <DockPanel>
-                            <Image Source="pack://application:,,,/Icone/people.png" Width="20"/>
-                            <Label x:Name="lblCustomers" Content="Clienti totali: "/>
-                        </DockPanel>
+                            <DockPanel>
+                                <Image Source="pack://application:,,,/Icone/people.png" Width="20"/>
+                                <Label x:Name="lblCustomers" Content="Clienti totali: "/>
+                            </DockPanel>
                         
-                        <DockPanel>
-                            <Image Source="pack://application:,,,/Icone/badge.png" Width="20"/>
-                            <Label x:Name="lblEmployees"  Content="Dipendenti totali: "/>
-                        </DockPanel>
+                            <DockPanel>
+                                <Image Source="pack://application:,,,/Icone/badge.png" Width="20"/>
+                                <Label x:Name="lblEmployees"  Content="Dipendenti totali: "/>
+                            </DockPanel>
                         
-                        <DockPanel>
-                            <Image Source="pack://application:,,,/Icone/outcome.png" Width="20"/>
-                            <Label x:Name="lblExpenses" Content="Spese totali: "/>
-                        </DockPanel>
+                            <DockPanel>
+                                <Image Source="pack://application:,,,/Icone/outcome.png" Width="20"/>
+                                <Label x:Name="lblExpenses" Content="Spese totali: "/>
+                            </DockPanel>
                         
                         
-                        <DockPanel>
-                            <Image Source="pack://application:,,,/Icone/income.png" Width="20"/>
-                            <Label x:Name="lblRevenue"  Content="Entrate totali: "/>
-                        </DockPanel>
+                            <DockPanel>
+                                <Image Source="pack://application:,,,/Icone/income.png" Width="20"/>
+                                <Label x:Name="lblRevenue"  Content="Entrate totali: "/>
+                            </DockPanel>
 
-                        <DockPanel>
-                            <Image Source="pack://application:,,,/Icone/profit.png" Width="20"/>
-                            <Label x:Name="lblProfit" Content="Profitto: "/>
-                        </DockPanel>
+                            <DockPanel>
+                                <Image Source="pack://application:,,,/Icone/profit.png" Width="20"/>
+                                <Label x:Name="lblProfit" Content="Profitto: "/>
+                            </DockPanel>
                         
-                    </StackPanel>
+                        </StackPanel>
+                    </Viewbox>
                 </Grid>
             </TabItem>
             
             <!--Test IEnumerable-->
             <TabItem Header="Test IEnumerable">
-                <Grid>
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="Stampa tutti i membri dell'azienda" Height="30" x:Name="btnStampaTuttiMembri" Click="btnStampaTuttiMembri_Click"/>
-                        <ListBox Margin="10,0,0,0" x:Name="lstProvaIEnumerable" Width="300" MinHeight="350" VerticalAlignment="Center"/>
-                    </StackPanel>
+                <Grid x:Name="grdIEnumerable">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Row="0" Grid.Column="0" Margin="2" Content="Stampa tutti i dipendenti dell'azienda" Height="30" x:Name="btnStampaTuttiDipendenti" Click="btnStampaTuttiDipendenti_Click"/>
+                    <ListBox Grid.Row="1" Grid.Column="0" x:Name="lstProvaIEnumerableDipendenti" Margin="2" MinHeight="100" MaxHeight="{Binding ElementName=grdIEnumerable, Path=ActualHeight}" VerticalAlignment="Top"/>
+
+                    <Button Grid.Row="0" Grid.Column="1" Margin="2" Content="Stampa tutti i membri dell'azienda" Height="30" x:Name="btnStampaTuttiMembri" Click="btnStampaTuttiMembri_Click"/>
+                    <ListBox Grid.Row="1" Grid.Column="1" x:Name="lstProvaIEnumerableTutti" Margin="2" MaxHeight="{Binding ElementName=grdIEnumerable, Path=ActualHeight}" MinHeight="100" VerticalAlignment="Top"/>
+
+                    <Button Grid.Row="0" Grid.Column="2" Margin="2" Content="Stampa tutti i clienti dell'azienda" Height="30" x:Name="btnStampaTuttiClienti" Click="btnStampaTuttiClienti_Click"/>
+                    <ListBox Grid.Row="1" Grid.Column="2" x:Name="lstProvaIEnumerableClienti" Margin="2" MinHeight="100" MaxHeight="{Binding ElementName=grdIEnumerable, Path=ActualHeight}" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
         </TabControl>

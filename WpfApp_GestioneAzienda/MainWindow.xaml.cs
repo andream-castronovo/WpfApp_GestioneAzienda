@@ -963,10 +963,29 @@ namespace WpfApp_GestioneAzienda
         
         private void btnStampaTuttiMembri_Click(object sender, RoutedEventArgs e)
         {
-            lstProvaIEnumerable.Items.Clear();
+            lstProvaIEnumerableTutti.Items.Clear();
             foreach (Persona<decimal> p in _azienda)
             {
-                lstProvaIEnumerable.Items.Add(p);
+                lstProvaIEnumerableTutti.Items.Add(p);
+            }
+        }
+
+        private void btnStampaTuttiClienti_Click(object sender, RoutedEventArgs e)
+        {
+            lstProvaIEnumerableClienti.Items.Clear();
+            foreach (Persona<decimal> p in _azienda)
+            {
+                if (p is Customer<decimal>)
+                    lstProvaIEnumerableClienti.Items.Add(p);
+            }
+        }
+        private void btnStampaTuttiDipendenti_Click(object sender, RoutedEventArgs e)
+        {
+            lstProvaIEnumerableDipendenti.Items.Clear();
+            foreach (Persona<decimal> p in _azienda)
+            {
+                if (p is Employee<decimal>)
+                    lstProvaIEnumerableDipendenti.Items.Add(p);
             }
         }
     }

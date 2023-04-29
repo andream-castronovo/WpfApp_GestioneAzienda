@@ -81,14 +81,14 @@
           "_costo": 23.0,
           "_valuta": "€",
           "Price": 23.0,
-          "Tipo": 1,
+          "Tipo": 0,
           "Note": null
         },
         {
           "_costo": 34.0,
           "_valuta": "€",
           "Price": 34.0,
-          "Tipo": 3,
+          "Tipo": 0,
           "Note": null
         }
       ],
@@ -96,9 +96,24 @@
       "ID": "a890db22-48ee-4562-bc9d-4946c21521f2",
       "Nome": "Annamaria",
       "Cognome": "Grondaia"
+    },
+    {
+      "ListaAcquisti": [
+        {
+          "_costo": 33.0,
+          "_valuta": "€",
+          "Price": 33.0,
+          "Tipo": 2,
+          "Note": null
+        }
+      ],
+      "SpesaTotale": 33.0,
+      "ID": "bc97600f-4ba7-40eb-8ddb-2047c48b9224",
+      "Nome": "q",
+      "Cognome": "s"
     }
   ],
   "SpeseTotali": 1200.00,
-  "EntrateTotali": 5665.0,
-  "ProfittoTotale": 4465.00
+  "EntrateTotali": 5698.0,
+  "ProfittoTotale": 4498.00
 }
