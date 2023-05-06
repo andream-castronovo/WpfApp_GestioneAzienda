@@ -166,6 +166,23 @@ namespace SharedProject_Azienda
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
+        public IEnumerable<Employee<T>> Employees
+        {
+            get
+            {
+                foreach (Employee<T> emp in ListaDipendenti)
+                    yield return emp;
+            }
+        }
+        public IEnumerable<Customer<T>> Customers
+        {
+            get
+            {
+                foreach (Customer<T> c in ListaClienti)
+                    yield return c;
+            }
+        }
+        
         #region Operatori
 
         #region Uguale e diverso

@@ -5,24 +5,15 @@
       "ID": "dd05ca1c-4355-46db-b553-62fb47a3be3b",
       "Nome": "Giorgio",
       "Cognome": "Rossi"
+    },
+    {
+      "StipendioAnnuo": 2333.0,
+      "ID": "a890db22-48ee-4562-bc9d-4946c21521f2",
+      "Nome": "Annamaria",
+      "Cognome": "Grondaia"
     }
   ],
   "ListaClienti": [
-    {
-      "ListaAcquisti": [
-        {
-          "_costo": 3200.0,
-          "_valuta": "€",
-          "Price": 3200.0,
-          "Tipo": 0,
-          "Note": null
-        }
-      ],
-      "SpesaTotale": 3200.0,
-      "ID": "3993a5c3-5665-431c-976e-24842dd9d3cf",
-      "Nome": "Alberto",
-      "Cognome": "Giacomini"
-    },
     {
       "ListaAcquisti": [
         {
@@ -48,21 +39,6 @@
     {
       "ListaAcquisti": [
         {
-          "_costo": 2400.0,
-          "_valuta": "€",
-          "Price": 2400.0,
-          "Tipo": 0,
-          "Note": null
-        }
-      ],
-      "SpesaTotale": 2400.0,
-      "ID": "0b4b5a62-8ba1-404e-aab2-5e7317ae53f9",
-      "Nome": "Giovanni",
-      "Cognome": "Giorgio"
-    },
-    {
-      "ListaAcquisti": [
-        {
           "_costo": 2.0,
           "_valuta": "€",
           "Price": 2.0,
@@ -83,37 +59,15 @@
           "Price": 23.0,
           "Tipo": 0,
           "Note": null
-        },
-        {
-          "_costo": 34.0,
-          "_valuta": "€",
-          "Price": 34.0,
-          "Tipo": 0,
-          "Note": null
         }
       ],
-      "SpesaTotale": 57.0,
-      "ID": "a890db22-48ee-4562-bc9d-4946c21521f2",
-      "Nome": "Annamaria",
-      "Cognome": "Grondaia"
-    },
-    {
-      "ListaAcquisti": [
-        {
-          "_costo": 33.0,
-          "_valuta": "€",
-          "Price": 33.0,
-          "Tipo": 2,
-          "Note": null
-        }
-      ],
-      "SpesaTotale": 33.0,
-      "ID": "bc97600f-4ba7-40eb-8ddb-2047c48b9224",
-      "Nome": "q",
-      "Cognome": "s"
+      "SpesaTotale": 23.0,
+      "ID": "d85d1693-c6e0-4c22-b4ad-d49f3a7bd7aa",
+      "Nome": "Test",
+      "Cognome": "1"
     }
   ],
-  "SpeseTotali": 1200.00,
-  "EntrateTotali": 5698.0,
-  "ProfittoTotale": 4498.00
+  "SpeseTotali": 3533.00,
+  "EntrateTotali": 31.0,
+  "ProfittoTotale": -3502.00
 }

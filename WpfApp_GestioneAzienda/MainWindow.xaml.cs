@@ -31,11 +31,12 @@ namespace WpfApp_GestioneAzienda
         const string SAVE_FILE_PATH_XML = @"..\..\salvataggioJson.xml";
         const string SAVE_FILE_PATH_CSV = @"..\..\salvataggioJson.csv";
 
-        bool _autosalvataggio;
 
         Company<decimal> _azienda;
         List<Acquisto<decimal>> _acquistiCorrenti;
+        
         bool _toSave;
+        bool _autosalvataggio;
         
         #region Eventi
 
@@ -67,6 +68,7 @@ namespace WpfApp_GestioneAzienda
                 _azienda.ListaClienti.Add(
                     new Customer<decimal>("Giovanni", "Giorgio", new List<Acquisto<decimal>>() { new Acquisto<decimal>(Prodotti.Condensatore, 2400m) })
                     );
+
                 _toSave = true;
             }
             else
@@ -87,7 +89,7 @@ namespace WpfApp_GestioneAzienda
 
 
 
-            rdbCliente.IsChecked = true;
+            rdbCliente.IsChecked = true; // Metto checked di default il cliente, in modo tale che farà anche il suo metodo
 
             Reset();
 
@@ -134,12 +136,12 @@ namespace WpfApp_GestioneAzienda
 
             try
             {
-                if (IsPlaceholder(txtNome)) // per controllo placeholder
+                if (IsPlaceholder(txtNome)) // Per controllo placeholder
                     throw new Exception("Il nome è vuoto");
                 if (IsPlaceholder(txtCognome))
                     throw new Exception("Il cognome è vuoto");
 
-                nome = ControllaStringa(txtNome.Text, seVuota:"Il nome è vuoto");
+                nome = ControllaStringa(txtNome.Text, seVuota:"Il nome è vuoto"); // Controllo le stringe
                 cognome = ControllaStringa(txtCognome.Text, seVuota:"Il cognome è vuoto");
             }
             catch (Exception ex)
@@ -171,13 +173,15 @@ namespace WpfApp_GestioneAzienda
                     }
                 }
 
-                _azienda.ListaClienti.Add(
+                // Aggiungo il cliente alla lista
+                _azienda.ListaClienti.Add( 
                     new Customer<decimal>(
                         nome,
                         cognome,
                         _acquistiCorrenti
                         )
                     );
+                // Resetto la lista di acquisti
                 _acquistiCorrenti = new List<Acquisto<decimal>>();
             }
             else if ((bool)rdbImpiegato.IsChecked)
@@ -185,7 +189,7 @@ namespace WpfApp_GestioneAzienda
                 decimal stipendio;
                 try
                 {
-                    if (IsPlaceholder(txtStipendio))
+                    if (IsPlaceholder(txtStipendio)) // Controllo placeholder
                         throw new Exception("Lo stipendio è vuoto");
 
                     stipendio = decimal.Parse(ControllaStringa(txtStipendio.Text, seVuota:"Lo stipendio è vuoto"));
@@ -193,9 +197,10 @@ namespace WpfApp_GestioneAzienda
                 catch (Exception ex)
                 {
                     MessaggioErrore(ex.Message);
-                    return;
+                    return; // Se il codice arriva qui deve uscire dal metodo, perché c'è stato un problema e l'utente deve sistemare
                 }
 
+                // Aggiunge il dipendente alla lista
                 _azienda.ListaDipendenti.Add(
                     new Employee<decimal>(
                         nome,
@@ -206,10 +211,13 @@ namespace WpfApp_GestioneAzienda
                 
             }
 
+            // Refresho entrambe le liste in modo da mostrare la nuova aggiunta
             lstDipendenti.Items.Refresh();
             lstClienti.Items.Refresh();
             
             Reset();
+
+            // Se c'è l'autosalvataggio allora salva, altrimenti imposta la variabile che notificherà all'utente di salvare alla chiusura del programma
             if (_autosalvataggio)
                 SalvaJson();
             else
@@ -217,7 +225,7 @@ namespace WpfApp_GestioneAzienda
         }
 
         /// <summary>
-        ///  Per aggiungere acquisti
+        /// Per aggiungere acquisti
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -225,12 +233,13 @@ namespace WpfApp_GestioneAzienda
         {
             try
             {
-                if (lstAcquisti.ItemsSource == null)
+                if (lstAcquisti.ItemsSource == null) // Se la lista di acquisti non ha una Source, collegala agli acquisti correnti
                     lstAcquisti.ItemsSource = _acquistiCorrenti;
                 
-                if (IsPlaceholder(txtPrezzoAcquisto))
+                if (IsPlaceholder(txtPrezzoAcquisto)) // Controlla se il prezzo è vuoto
                     throw new Exception("Il prezzo è vuoto");
 
+                // Aggiungi l'acquisto agli acquisti correnti
                 _acquistiCorrenti.Add(
                     new Acquisto<decimal>(
                         (Prodotti)OttieniNumByNome(
@@ -243,6 +252,7 @@ namespace WpfApp_GestioneAzienda
                     )
                 );
 
+                // Refresha il controllo collegato alla lista per mostrare la nuova aggiunta
                 lstAcquisti.Items.Refresh();
             }
             catch (Exception ex)
@@ -257,6 +267,14 @@ namespace WpfApp_GestioneAzienda
         }
         private void btnConfermaModifica_Click(object sender, RoutedEventArgs e)
         {
+            // Metodo accessibile solo dopo aver cliccato precedentemente "btnModifica"
+            // Il metodo è molto simile a btnAggiungiPersona, esclusa la gestione degli ID che andranno
+            // modificati da quelli generati di default della classe Persona nel caso in cui si voglia cambiare
+            // il ruolo di una persona.
+            // Per esempio da employee a customer è necessario fare "new Customer(..)" che farà anche il costruttore
+            // di Persona che comprende la generazione automatica dell'ID. Per questo è necessario spostare anche l'ID
+            // 
+            
             string nome;
             string cognome;
             try
@@ -412,6 +430,7 @@ namespace WpfApp_GestioneAzienda
 
 
         }
+
         private void btnRimuoviPersona_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult mbr = MessageBox.Show(
@@ -447,18 +466,32 @@ namespace WpfApp_GestioneAzienda
             else
                 _toSave = true;
         }
+        private void btnRimuoviAcquisto_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (lstAcquisti.SelectedIndex == -1)
+                    throw new Exception("Devi prima selezionare un acquisto");
 
+                _acquistiCorrenti.RemoveAt(lstAcquisti.SelectedIndex);
+                lstAcquisti.Items.Refresh();
+            }
+            catch (Exception ex)
+            {
+                MessaggioErrore(ex.Message);
+            }
+        }
 
         #endregion
 
         #region List Box
 
-        private bool PersonaInAzienda(Persona<decimal> p)
-        {
-            if (_azienda.ListaClienti.Contains(p) || _azienda.ListaDipendenti.Contains(p))
-                return true;
-            return false;
-        }
+        //private bool PersonaInAzienda(Persona<decimal> p)
+        //{
+        //    if (_azienda.ListaClienti.Contains(p) || _azienda.ListaDipendenti.Contains(p))
+        //        return true;
+        //    return false;
+        //}
 
         private void lstClienti_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -511,6 +544,20 @@ namespace WpfApp_GestioneAzienda
             ModalitaModifica(false);
             AccessoInput(false);
         }
+        private void lstAcquisti_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lstAcquisti.SelectedIndex == -1)
+                btnRimuoviAcquisto.IsEnabled = false;
+            else
+                btnRimuoviAcquisto.IsEnabled = true;
+        }
+        private void RefreshListe()
+        {
+            lstClienti.Items.Refresh();
+            lstAcquisti.Items.Refresh();
+            lstDipendenti.Items.Refresh();
+        }
+
 
         #endregion
 
@@ -526,11 +573,93 @@ namespace WpfApp_GestioneAzienda
             TextBox txt = (TextBox)sender;
             ImpostaPlaceholder(txt, (txt.Tag as string).Split('#')[0]);
         }
-        
-        #endregion
-        
+
         #endregion
 
+        #region Gestione delle TAB della finestra
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+
+            switch (tcNav.SelectedIndex)
+            {
+                // 0 è la gestione dell'azienda
+                // 1 sono le statistiche aziendali
+                // 2 è la prova di IEnumerable
+                case 1:
+                    lblCustomers.Content = $"Clienti totali: {_azienda.ListaClienti.Count}";
+                    lblEmployees.Content = $"Dipendenti totali: {_azienda.ListaDipendenti.Count}";
+                    lblExpenses.Content = $"Spese totali: {_azienda.SpeseTotali}€";
+                    lblRevenue.Content = $"Entrate totali: {_azienda.EntrateTotali}€";
+                    lblProfit.Content = $"Profitto: {_azienda.ProfittoTotale}€";
+                    break;
+            }
+
+        }
+
+        #endregion
+
+        #region Barra dei menu
+        private void mntApriCsv_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Non ancora implementato.", "Errore", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+        private void mntSalvaCsv_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Non ancora implementato.", "Errore", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+        private void mntSalvaXml_Click(object sender, RoutedEventArgs e)
+        {
+            SalvaXML();
+        }
+        private void mntSalvaJson_Click(object sender, RoutedEventArgs e)
+        {
+            SalvaJson();
+        }
+        private void mntApriJson_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                CaricaJson();
+                RefreshListe();
+            }
+            catch
+            {
+                MessaggioErrore("C'è stato un problema nella lettura del file, sicuro il file esista?");
+            }
+        }
+        private void mntApriXml_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                CaricaXML();
+            }
+            catch
+            {
+                MessaggioErrore("C'è stato un problema nella lettura del file, sicuro il file esista?");
+                return;
+            }
+
+            lstDipendenti.ItemsSource = _azienda.ListaDipendenti;
+            lstClienti.ItemsSource = _azienda.ListaClienti;
+            _toSave = false;
+
+            RefreshListe();
+        }
+
+        private void mntAutosalvataggio_Click(object sender, RoutedEventArgs e)
+        {
+            _autosalvataggio = !_autosalvataggio;
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Utilites generali
         /// <summary>
         /// Carica l'interfaccia per la persona (Vedere CaricaDati per caricare i dati)
         /// </summary>
@@ -648,17 +777,20 @@ namespace WpfApp_GestioneAzienda
         /// </summary>
         private void Reset()
         {
+            // Svuoto le Textbox
             txtNome.Text = "";
             txtCognome.Text = "";
             txtStipendio.Text = "";
             txtPrezzoAcquisto.Text = "";
 
+            // Rimuove la selezione della combo box dei prodotti
             cmbListaAcquisti.SelectedIndex = -1;
 
-
-            lstAcquisti.ItemsSource = null;
+            // Azzero la lista degli acquisti
+            lstAcquisti.ItemsSource = null; // Tolgo il collegamento al riferimento della vecchia lista acquisti (che verrà ricreata da zero nella prossima riga) 
             _acquistiCorrenti = new List<Acquisto<decimal>>();
 
+            // Disabilito i bottoni di modifica e di rimozione (perché non sarà selezionato nulla nella lista)
             btnModifica.IsEnabled = false;
             btnRimuovi.IsEnabled = false;
 
@@ -668,6 +800,7 @@ namespace WpfApp_GestioneAzienda
             btnRimuoviAcquisto.IsEnabled = false;
 
 
+            // Reimposto il placeholder per le textbox (svuotate sempre da questo metodo)
             ImpostaPlaceholder(txtNome, "Inserisci nome");
             ImpostaPlaceholder(txtCognome, "Inserisci cognome");
             ImpostaPlaceholder(txtStipendio, "Inserisci stipendio annuo");
@@ -676,6 +809,14 @@ namespace WpfApp_GestioneAzienda
             AccessoInput(true);
         }
 
+        /// <summary>
+        /// Si occupa di abilitare o disabilitare i controlli che l'utente può cliccare/modificare per
+        /// maneggiare clienti o dipendenti.
+        /// Per esempio: 
+        /// quando seleziono un cliente/dipendente dalle liste fornite, l'utente non può subito
+        /// modificare i suoi dati, ma prima abilitare la modifica.
+        /// </summary>
+        /// <param name="mod">se "true" l'utente potrà utilizzare i controlli, se "false" l'utente potrà solo vederli</param>
         private void AccessoInput(bool mod)
         {
             txtNome.IsEnabled = mod;
@@ -690,6 +831,11 @@ namespace WpfApp_GestioneAzienda
             rdbImpiegato.IsEnabled = mod;
         }
 
+        /// <summary>
+        /// Gestisce la visibilità dei bottoni al fondo della pagina di gestione relativi 
+        /// alla modifica e all'aggiunta del personale e dei clienti.
+        /// </summary>
+        /// <param name="mod">se "true" sarà visibile il bottone di conferma della modifica, se "false" sarà visibile il bottone di avvio modifica e </param>
         private void ModalitaModifica(bool mod)
         {
             if (mod)
@@ -707,7 +853,9 @@ namespace WpfApp_GestioneAzienda
             }
         }
 
- 
+        #endregion
+
+        #region Gestione placeholder delle TextBox
         private void ImpostaPlaceholder(TextBox txt, string placeholder)
         {
             if (txt.Text == "")
@@ -729,10 +877,10 @@ namespace WpfApp_GestioneAzienda
                 txt.Tag = (txt.Tag as string).Split('#')[0] + "#inactive";
             }
         }
-   
-        
+        #endregion
+
         #region JSON
-        
+
         private void SalvaJson()
         {
             JsonSerializer js = new JsonSerializer();
@@ -741,6 +889,7 @@ namespace WpfApp_GestioneAzienda
             {
                 js.Serialize(sw, _azienda);
             }
+            _toSave = false;
         }
         private void CaricaJson()
         {
@@ -789,9 +938,6 @@ namespace WpfApp_GestioneAzienda
 
             using (StreamReader myReader = new StreamReader(SAVE_FILE_PATH_XML))
                 _azienda = (Company<decimal>)mySerializer.Deserialize(myReader);
-            
-            
-            
         }
 
 
@@ -810,106 +956,6 @@ namespace WpfApp_GestioneAzienda
         }
 
         #endregion
-
-
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            switch (tcNav.SelectedIndex)
-            {
-                case 1:
-                    lblCustomers.Content = $"Clienti totali: {_azienda.ListaClienti.Count}";
-                    lblEmployees.Content = $"Dipendenti totali: {_azienda.ListaDipendenti.Count}";
-                    lblExpenses.Content = $"Spese totali: {_azienda.SpeseTotali}€";
-                    lblRevenue.Content = $"Entrate totali: {_azienda.EntrateTotali}€";
-                    lblProfit.Content = $"Profitto: {_azienda.ProfittoTotale}€";
-                    break;
-            }
-            
-        }
-
-        private void mntSalvaJson_Click(object sender, RoutedEventArgs e)
-        {
-            SalvaJson();
-        }
-        private void mntApriJson_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                CaricaJson();
-                RefreshListe();
-            }
-            catch
-            {
-                MessaggioErrore("C'è stato un problema nella lettura del file, sicuro il file esista?");
-            }
-        }
-
-        private void mntSalvaXml_Click(object sender, RoutedEventArgs e)
-        {
-            SalvaXML();
-        }
-        private void mntApriXml_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                CaricaXML();
-            }
-            catch
-            {
-                MessaggioErrore("C'è stato un problema nella lettura del file, sicuro il file esista?");
-                return;
-            }
-
-            lstDipendenti.ItemsSource = _azienda.ListaDipendenti;
-            lstClienti.ItemsSource = _azienda.ListaClienti;
-            _toSave = false;
-
-            RefreshListe();
-        }
-        private void RefreshListe()
-        {
-            lstClienti.Items.Refresh();
-            lstAcquisti.Items.Refresh();
-            lstDipendenti.Items.Refresh();
-        }
-        private void mntApriCsv_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Non ancora implementato.","Errore",MessageBoxButton.OK, MessageBoxImage.Error);
-            return;
-        }
-        private void mntSalvaCsv_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Non ancora implementato.", "Errore", MessageBoxButton.OK, MessageBoxImage.Error);
-            return;
-        }
-
-        private void btnRimuoviAcquisto_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (lstAcquisti.SelectedIndex == -1)
-                    throw new Exception("Devi prima selezionare un acquisto");
-
-                _acquistiCorrenti.RemoveAt(lstAcquisti.SelectedIndex);
-                lstAcquisti.Items.Refresh();
-            }
-            catch (Exception ex)
-            {
-                MessaggioErrore(ex.Message);
-            }
-        }
-        private void lstAcquisti_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (lstAcquisti.SelectedIndex == -1)
-                btnRimuoviAcquisto.IsEnabled = false;
-            else
-                btnRimuoviAcquisto.IsEnabled = true;
-        }
-        private void mntAutosalvataggio_Click(object sender, RoutedEventArgs e)
-        {
-            _autosalvataggio = !_autosalvataggio;
-        }
-
 
         #region Ordina clienti
         private void btnOrdinaClientiNome_Click(object sender, RoutedEventArgs e)
@@ -960,7 +1006,8 @@ namespace WpfApp_GestioneAzienda
             lstDipendenti.Items.Refresh();
         }
         #endregion
-        
+
+        #region Utilizzo IEnumerable
         private void btnStampaTuttiMembri_Click(object sender, RoutedEventArgs e)
         {
             lstProvaIEnumerableTutti.Items.Clear();
@@ -973,20 +1020,20 @@ namespace WpfApp_GestioneAzienda
         private void btnStampaTuttiClienti_Click(object sender, RoutedEventArgs e)
         {
             lstProvaIEnumerableClienti.Items.Clear();
-            foreach (Persona<decimal> p in _azienda)
+            foreach (Customer<decimal> c in _azienda.Customers)
             {
-                if (p is Customer<decimal>)
-                    lstProvaIEnumerableClienti.Items.Add(p);
+                lstProvaIEnumerableClienti.Items.Add(c);
             }
         }
         private void btnStampaTuttiDipendenti_Click(object sender, RoutedEventArgs e)
         {
             lstProvaIEnumerableDipendenti.Items.Clear();
-            foreach (Persona<decimal> p in _azienda)
+            foreach (Employee<decimal> emp in _azienda.Employees)
             {
-                if (p is Employee<decimal>)
-                    lstProvaIEnumerableDipendenti.Items.Add(p);
+                lstProvaIEnumerableDipendenti.Items.Add(emp);
             }
         }
+
+        #endregion
     }
 }
